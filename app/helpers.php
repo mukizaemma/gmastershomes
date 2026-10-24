@@ -1,0 +1,507 @@
+<?php
+
+declare(strict_types=1);
+
+if (! function_exists('optimized_image')) {
+    function optimized_image(?string $path, ?int $width = null): string
+    {
+        return \App\Support\OptimizedImage::url($path, $width);
+    }
+}
+
+if (! function_exists('hotel_discount_offers')) {
+    /** Active suite offers for this request. */
+    function hotel_discount_offers(): \Illuminate\Support\Collection
+    {
+        static $offers;
+
+        if ($offers === null) {
+            $offers = \App\Models\RoomDiscount::query()
+                ->with('room:id,title')
+                ->where('status', 'Active')
+                ->get();
+        }
+
+        return $offers;
+    }
+}
+
+if (! function_exists('hotel_offers_today')) {
+    function hotel_offers_today(): \Illuminate\Support\Collection
+    {
+        $today = now()->toDateString();
+
+        return hotel_discount_offers()->filter(function (\App\Models\RoomDiscount $offer) use ($today) {
+            $starts = $offer->starts_on?->toDateString();
+            $ends = $offer->ends_on?->toDateString();
+
+            return $starts !== null && $ends !== null && $starts <= $today && $ends >= $today;
+        })->values();
+    }
+}
+
+if (! function_exists('hotel_offer_badge')) {
+    function hotel_offer_badge(\App\Models\RoomDiscount $offer, ?object $setting = null): string
+    {
+        if ($offer->discount_type === 'percent') {
+            $value = rtrim(rtrim(number_format((float) $offer->amount, 2, '.', ''), '0'), '.');
+
+            return site_trans('room.off_percent', ['value' => $value]);
+        }
+
+        return site_trans('room.off_amount', ['value' => hotel_price((float) $offer->amount, $setting)]);
+    }
+}
+
+if (! function_exists('hotel_nightly_offer')) {
+    /**
+     * @return array{list: float, sale: float, has_discount: bool, badge: string, label: string}
+     */
+    function hotel_nightly_offer(\App\Models\Room $room, ?string $checkin = null, ?string $checkout = null, ?object $setting = null): array
+    {
+        return app(\App\Services\RoomDiscountService::class)->displayNightly(
+            $room,
+            hotel_currency($setting),
+            $checkin,
+            $checkout
+        );
+    }
+}
+
+if (! function_exists('hotel_price')) {
+    /**
+     * Format a room or site price using the hotel's currency setting (USD or RWF).
+     */
+    function hotel_price(mixed $value, ?object $setting, ?string $currency = null): string
+    {
+        $amount = (float) ($value ?? 0);
+        $currency = strtolower((string) ($currency ?: ($setting?->price_currency ?? 'usd')));
+        if ($currency === 'rwf') {
+            return 'RWF ' . number_format($amount, 0);
+        }
+
+        return '$' . number_format($amount, 0);
+    }
+}
+
+if (! function_exists('hotel_has_public_rate')) {
+    function hotel_has_public_rate(?\App\Models\Room $room): bool
+    {
+        if (! $room) {
+            return false;
+        }
+
+        if ((float) ($room->price ?? 0) > 0 || (float) ($room->price_rwf ?? 0) > 0) {
+            return true;
+        }
+
+        foreach ($room->publicRatePlans() as $plan) {
+            foreach (['single', 'double', 'single_sale', 'double_sale'] as $key) {
+                if ((float) ($plan[$key] ?? 0) > 0) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+}
+
+if (! function_exists('hotel_currency')) {
+    function hotel_currency(?object $setting = null): string
+    {
+        if ($setting === null) {
+            $setting = \App\Models\Setting::query()->first();
+        }
+
+        return strtolower((string) ($setting?->price_currency ?? 'usd')) === 'rwf' ? 'rwf' : 'usd';
+    }
+}
+
+if (! function_exists('reservations_manager_enabled')) {
+    function reservations_manager_enabled(): bool
+    {
+        if (! \Illuminate\Support\Facades\Schema::hasColumn('settings', 'reservations_manager_enabled')) {
+            return false;
+        }
+
+        return (bool) \App\Models\Setting::query()->value('reservations_manager_enabled');
+    }
+}
+
+if (! function_exists('booking_channel_enabled')) {
+    function booking_channel_enabled(): bool
+    {
+        return \App\Support\BookingChannel::enabled();
+    }
+}
+
+if (! function_exists('hotel_reservation_url_configured')) {
+    /** Reservation URL from settings / env (ignores enable flag). */
+    function hotel_reservation_url_configured(?object $setting = null): ?string
+    {
+        $setting = $setting ?? \App\Models\Setting::first();
+        $fromSetting = trim((string) ($setting?->linktree ?? ''));
+        if ($fromSetting !== '') {
+            return $fromSetting;
+        }
+
+        $channels = \App\Support\HotelChannels::all();
+        $fromChannels = trim((string) ($channels['reservation_url'] ?? ''));
+
+        return $fromChannels !== '' ? $fromChannels : null;
+    }
+}
+
+if (! function_exists('hotel_reservation_url')) {
+    /** Active reservation URL — only when the booking channel is enabled and configured. */
+    function hotel_reservation_url(?object $setting = null): ?string
+    {
+        if (! booking_channel_enabled()) {
+            return null;
+        }
+
+        return hotel_reservation_url_configured($setting);
+    }
+}
+
+if (! function_exists('site_meta_description')) {
+    function site_meta_description(?object $setting = null): string
+    {
+        $setting = $setting ?? \App\Models\Setting::first();
+        $description = trim((string) ($setting?->meta_description ?? ''));
+        if ($description !== '') {
+            return \Illuminate\Support\Str::limit($description, 320);
+        }
+
+        $quote = trim(strip_tags((string) ($setting?->quote ?? '')));
+        if ($quote !== '') {
+            return \Illuminate\Support\Str::limit($quote, 320);
+        }
+
+        return trim((string) ($setting?->company ?? ''));
+    }
+}
+
+if (! function_exists('site_hotel_schema')) {
+    /**
+     * @return array<string, mixed>
+     */
+    function site_hotel_schema(?object $setting = null): array
+    {
+        $setting = $setting ?? \App\Models\Setting::first();
+        $contact = \App\Models\HotelContact::first();
+        $logoPath = trim((string) ($setting?->logo ?? ''));
+        $logoUrl = $logoPath !== '' ? asset('storage/images'.$logoPath) : null;
+
+        $schema = [
+            '@context' => 'https://schema.org',
+            '@type' => 'BedAndBreakfast',
+            'name' => $setting?->company ?: config('app.name'),
+            'url' => url('/'),
+        ];
+        if ($logoUrl) {
+            $schema['image'] = $logoUrl;
+            $schema['logo'] = $logoUrl;
+        }
+
+        $address = trim((string) ($setting?->address ?? $contact?->address ?? ''));
+        if ($address !== '') {
+            $schema['address'] = [
+                '@type' => 'PostalAddress',
+                'streetAddress' => $address,
+                'addressLocality' => $contact?->city ?: 'Kigali',
+                'addressCountry' => $contact?->country ?? 'RW',
+            ];
+        }
+
+        $phone = hotel_public_phone($setting);
+        if ($phone) {
+            $schema['telephone'] = $phone;
+        }
+
+        $email = trim((string) ($setting?->email ?? $contact?->email ?? ''));
+        if ($email !== '') {
+            $schema['email'] = $email;
+        }
+
+        if (! empty($setting?->star_rating)) {
+            $schema['starRating'] = [
+                '@type' => 'Rating',
+                'ratingValue' => (int) $setting->star_rating,
+            ];
+        }
+
+        $reservationUrl = hotel_reservation_url_configured($setting);
+        if ($reservationUrl) {
+            $schema['potentialAction'] = [
+                '@type' => 'ReserveAction',
+                'target' => $reservationUrl,
+            ];
+        }
+
+        return array_filter($schema, fn ($value) => $value !== null && $value !== '');
+    }
+}
+
+if (! function_exists('hotel_is_legacy_reserve_label')) {
+    function hotel_is_legacy_reserve_label(string $label): bool
+    {
+        $normalized = mb_strtolower(trim($label));
+
+        return in_array($normalized, [
+            'reserve your suite',
+            'réservez votre suite',
+            'reservez votre suite',
+        ], true);
+    }
+}
+
+if (! function_exists('hotel_book_now_label')) {
+    /** Short label for Book Now buttons. Ignores a saved “Reserve your suite” phrase. */
+    function hotel_book_now_label(): string
+    {
+        $label = trim(site_trans('buttons.book_now'));
+        if ($label === '' || hotel_is_legacy_reserve_label($label)) {
+            return site_locale() === \App\Support\SiteLocale::FRENCH ? 'Réserver' : 'Book Now';
+        }
+
+        return $label;
+    }
+}
+
+if (! function_exists('slideshow_cta_label')) {
+    function slideshow_cta_label(?object $setting = null): string
+    {
+        $setting = $setting ?? \App\Models\Setting::first();
+        $label = trim((string) ($setting?->slideshow_cta_label ?? ''));
+
+        if ($label === '' || hotel_is_legacy_reserve_label($label)) {
+            return hotel_book_now_label();
+        }
+
+        return $label;
+    }
+}
+
+if (! function_exists('hotel_book_now_url')) {
+    /**
+     * External booking URL when channel is active, otherwise the offline wizard.
+     * Pass $roomId to preselect a room on the internal /book-now form.
+     */
+    function hotel_book_now_url(?object $setting = null, int|string|null $roomId = null): string
+    {
+        $url = hotel_reservation_url($setting);
+        if (filled($url)) {
+            return $url;
+        }
+
+        $params = [];
+        $roomId = (int) $roomId;
+        if ($roomId > 0) {
+            $params['room'] = $roomId;
+        }
+
+        return localized_route('connect', $params);
+    }
+}
+
+if (! function_exists('hotel_book_now_is_external')) {
+    function hotel_book_now_is_external(?object $setting = null): bool
+    {
+        return booking_channel_enabled() && filled(hotel_reservation_url_configured($setting));
+    }
+}
+
+if (! function_exists('hotel_invoice')) {
+    /**
+     * Details printed on a front-office invoice. Blank invoice fields fall back to the hotel contact.
+     *
+     * @return array{name: string, address: string, phone: string, email: string, tax_id: string, footer: string}
+     */
+    function hotel_invoice(?object $setting = null): array
+    {
+        $setting = $setting ?? \App\Models\Setting::first();
+        $pick = function (string $invoiceField, string $fallback = '') use ($setting): string {
+            $value = trim((string) ($setting->{$invoiceField} ?? ''));
+
+            return $value !== '' ? $value : $fallback;
+        };
+
+        $name = $pick('invoice_legal_name', trim((string) ($setting->company ?? '')));
+
+        return [
+            'name' => $name !== '' ? $name : 'GMasters Homes',
+            'address' => $pick('invoice_address', trim((string) ($setting->address ?? ''))),
+            'phone' => $pick('invoice_phone', (string) (hotel_public_phone($setting) ?? '')),
+            'email' => $pick('invoice_email', trim((string) ($setting->email ?? ''))),
+            'tax_id' => $pick('invoice_tax_id'),
+            'footer' => $pick('invoice_footer'),
+        ];
+    }
+}
+
+if (! function_exists('hotel_public_phone')) {
+    function hotel_public_phone(?object $setting = null): ?string
+    {
+        $setting = $setting ?? \App\Models\Setting::first();
+        $contact = \App\Models\HotelContact::first();
+        $fromContact = trim((string) ($contact?->phone ?? ''));
+        if ($fromContact !== '') {
+            return $fromContact;
+        }
+
+        $main = trim((string) ($setting?->phone ?? ''));
+
+        return $main !== '' ? $main : null;
+    }
+}
+
+if (! function_exists('hotel_whatsapp_digits')) {
+    /**
+     * Digits-only WhatsApp destination. The hotel phone is also the WhatsApp number.
+     */
+    function hotel_whatsapp_digits(?object $setting = null): ?string
+    {
+        $setting = $setting ?? \App\Models\Setting::first();
+        $fromPhone = preg_replace('/\D+/', '', (string) (hotel_public_phone($setting) ?? '')) ?: '';
+
+        return $fromPhone !== '' ? $fromPhone : null;
+    }
+}
+
+if (! function_exists('hotel_whatsapp_label')) {
+    /**
+     * Human-readable label for WhatsApp links (prefer formatted public phone).
+     */
+    function hotel_whatsapp_label(?object $setting = null): string
+    {
+        $setting = $setting ?? \App\Models\Setting::first();
+        $phone = hotel_public_phone($setting);
+        if (filled($phone)) {
+            return (string) $phone;
+        }
+
+        return '';
+    }
+}
+
+if (! function_exists('price_currency_label')) {
+    /**
+     * Short label for admin room/pricing forms (Settings → website price currency).
+     */
+    function price_currency_label(?object $setting): string
+    {
+        return strtolower((string) ($setting?->price_currency ?? 'usd')) === 'rwf'
+            ? 'RWF'
+            : 'USD ($)';
+    }
+}
+
+if (! function_exists('terms_content_html')) {
+    /**
+     * Public Terms page: render CMS HTML from Summernote, or upgrade legacy plain-text
+     * (pasted/textarea) into paragraphs and line breaks so the page is readable.
+     */
+    function terms_content_html(?string $raw): string
+    {
+        if ($raw === null || $raw === '') {
+            return '';
+        }
+
+        $t = $raw;
+        if (preg_match('/<[a-z!\/][\s\/>]/i', $t)) {
+            return $t;
+        }
+
+        $parts = preg_split('/\R{2,}/u', trim($t)) ?: [];
+        $out = [];
+        foreach ($parts as $part) {
+            $part = trim($part);
+            if ($part === '') {
+                continue;
+            }
+            $out[] = '<p>'.nl2br(e($part), false).'</p>';
+        }
+
+        return $out ? implode("\n", $out) : '';
+    }
+}
+
+if (! function_exists('admin_image_validation_rule')) {
+    /** Validation for CMS image uploads (compressed server-side if over 700 KB). */
+    function admin_image_validation_rule(bool $required = false): string
+    {
+        return ($required ? 'required|' : 'nullable|').'image|max:15360';
+    }
+}
+
+if (! function_exists('store_optimized_image')) {
+    function store_optimized_image(\Illuminate\Http\UploadedFile $file, string $directory, string $disk = 'public'): string
+    {
+        return app(\App\Services\OptimizedImageStorage::class)->store($file, $directory, $disk);
+    }
+}
+
+if (! function_exists('site_trans')) {
+    /** UI string: DB override → lang file → English fallback. */
+    function site_trans(string $key, array $replace = []): string
+    {
+        return app(\App\Services\SiteTranslationService::class)->get($key, $replace);
+    }
+}
+
+if (! function_exists('translations_enabled')) {
+    function translations_enabled(): bool
+    {
+        return \App\Support\SiteLocale::translationsEnabled();
+    }
+}
+
+if (! function_exists('site_locale')) {
+    function site_locale(): string
+    {
+        return \App\Support\SiteLocale::normalize(app()->getLocale());
+    }
+}
+
+if (! function_exists('localized_route')) {
+    function localized_route(string $name, array $parameters = [], bool $absolute = true): string
+    {
+        $url = route($name, $parameters, $absolute);
+
+        if (site_locale() === \App\Support\SiteLocale::FRENCH && translations_enabled()) {
+            $parts = parse_url($url) ?: [];
+            $path = $parts['path'] ?? '/';
+            if (! str_starts_with(ltrim($path, '/'), 'fr/') && ltrim($path, '/') !== 'fr') {
+                $path = '/fr'.($path === '/' ? '' : $path);
+            }
+
+            $suffix = '';
+            if (! empty($parts['query'])) {
+                $suffix .= '?'.$parts['query'];
+            }
+            if (! empty($parts['fragment'])) {
+                $suffix .= '#'.$parts['fragment'];
+            }
+
+            if ($absolute) {
+                return url($path).$suffix;
+            }
+
+            return $path.$suffix;
+        }
+
+        return $url;
+    }
+}
+
+if (! function_exists('locale_switch_url')) {
+    function locale_switch_url(string $targetLocale): string
+    {
+        return route('locale.switch', [
+            'locale' => $targetLocale,
+            'redirect' => '/'.ltrim(request()->path(), '/'),
+        ]);
+    }
+}
