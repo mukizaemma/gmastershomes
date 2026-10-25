@@ -75,6 +75,16 @@
                             <span class="room-detail-price-card__unit">{{ site_trans('room.per_night') }}</span>
                         </div>
                         @endif
+                        @php $monthlyAmount = hotel_monthly_amount($room, $setting ?? null); @endphp
+                        @if($monthlyAmount)
+                        <div class="room-detail-price-card__monthly">
+                            <span class="room-detail-price-card__label">{{ site_trans('room.long_stay') }}</span>
+                            <div class="room-detail-price-card__amount">
+                                <span class="room-detail-price-card__value">{{ hotel_price($monthlyAmount, $setting ?? null) }}</span>
+                                <span class="room-detail-price-card__unit">{{ site_trans('room.per_month') }}</span>
+                            </div>
+                        </div>
+                        @endif
                         <p class="room-detail-price-card__note">{{ $room->category === 'studio' ? site_trans('room.studio_note') : site_trans('room.price_note') }}</p>
                     </div>
 

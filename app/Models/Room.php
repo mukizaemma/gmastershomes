@@ -27,6 +27,8 @@ class Room extends Model
         'number_of_rooms',
         'price',
         'price_rwf',
+        'monthly_price',
+        'monthly_price_rwf',
         'couplePrice',
         'guests_included_in_price',
         'extra_adult_price',
@@ -42,6 +44,8 @@ class Room extends Model
     protected $casts = [
         'rate_plans' => 'array',
         'price_rwf' => 'float',
+        'monthly_price' => 'float',
+        'monthly_price_rwf' => 'float',
     ];
 
     public const BED_TYPES = [

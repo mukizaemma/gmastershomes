@@ -31,6 +31,14 @@
                             <label class="form-label">Standard nightly rate (RWF)</label>
                             <input type="number" class="form-control" name="price_rwf" min="0" step="1" value="{{ $room->price_rwf }}" placeholder="—">
                         </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Monthly rate, longer stay ($)</label>
+                            <input type="number" class="form-control" name="monthly_price" min="0" step="1" value="{{ $room->monthly_price }}" placeholder="—">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Monthly rate, longer stay (RWF)</label>
+                            <input type="number" class="form-control" name="monthly_price_rwf" min="0" step="1" value="{{ $room->monthly_price_rwf }}" placeholder="—">
+                        </div>
                     </div>
                     <button class="btn btn-dark mt-3" type="submit">Save {{ $room->title }} rates</button>
                 </form>

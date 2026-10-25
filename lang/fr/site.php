@@ -312,6 +312,8 @@ return [
         'back_to_rooms' => 'Toutes les chambres',
         'from' => 'À partir de',
         'per_night' => '/ nuit',
+        'per_month' => '/ mois',
+        'long_stay' => 'Séjour plus long',
         'price_note' => 'Le petit-déjeuner est inclus. Le tarif de la nuit est confirmé au moment de la réservation.',
         'book_lead' => 'Réservez la maison directement. Aucun paiement n’est prélevé sur cette page.',
         'about' => 'À propos de cette chambre',

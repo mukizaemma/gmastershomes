@@ -27,6 +27,7 @@ class RoomManagementController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0',
+            'monthly_price' => 'nullable|numeric|min:0',
             'bed_type' => 'nullable|in:twin,king,double,deluxe',
             'rates' => 'nullable|array',
             'rates.*.single' => 'nullable|numeric|min:0',
@@ -48,6 +49,7 @@ class RoomManagementController extends Controller
         $room->description = $request->description;
         $room->room_type = 'room';
         $room->price = $request->price;
+        $this->assignMonthlyPrice($room, $request);
         $room->couplePrice = null;
         $room->bed_type = $request->filled('bed_type') ? $request->bed_type : null;
         $room->rate_plans = $this->ratePlansFromRequest($request);
@@ -85,6 +87,7 @@ class RoomManagementController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0',
+            'monthly_price' => 'nullable|numeric|min:0',
             'bed_type' => 'nullable|in:twin,king,double,deluxe',
             'rates' => 'nullable|array',
             'rates.*.single' => 'nullable|numeric|min:0',
@@ -107,6 +110,7 @@ class RoomManagementController extends Controller
         $room->description = $request->description;
         $room->room_type = 'room';
         $room->price = $request->price;
+        $this->assignMonthlyPrice($room, $request);
         $room->bed_type = $request->filled('bed_type') ? $request->bed_type : null;
         $room->rate_plans = $this->ratePlansFromRequest($request, $room);
         $room->number_of_rooms = (int) $request->number_of_rooms;
@@ -165,6 +169,8 @@ class RoomManagementController extends Controller
             'title' => $room->title,
             'description' => $room->description,
             'price' => $room->price,
+            'monthly_price' => $room->monthly_price,
+            'monthly_price_rwf' => $room->monthly_price_rwf,
             'bed_type' => $room->bed_type,
             'rate_plans' => $room->ratePlans(),
             'number_of_rooms' => $room->number_of_rooms,
@@ -213,6 +219,16 @@ class RoomManagementController extends Controller
         }
 
         return response()->json(['success' => true, 'message' => 'Images added successfully']);
+    }
+
+    protected function assignMonthlyPrice(Room $room, Request $request): void
+    {
+        $amount = $request->filled('monthly_price') ? round((float) $request->monthly_price, 2) : null;
+        if (hotel_currency(Setting::first()) === 'rwf') {
+            $room->monthly_price_rwf = $amount;
+        } else {
+            $room->monthly_price = $amount;
+        }
     }
 
     /**

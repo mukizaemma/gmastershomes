@@ -107,6 +107,21 @@ if (! function_exists('hotel_has_public_rate')) {
     }
 }
 
+if (! function_exists('hotel_monthly_amount')) {
+    function hotel_monthly_amount(?\App\Models\Room $room, ?object $setting = null): ?float
+    {
+        if (! $room) {
+            return null;
+        }
+
+        $amount = hotel_currency($setting) === 'rwf'
+            ? $room->monthly_price_rwf
+            : $room->monthly_price;
+
+        return (float) $amount > 0 ? (float) $amount : null;
+    }
+}
+
 if (! function_exists('hotel_currency')) {
     function hotel_currency(?object $setting = null): string
     {

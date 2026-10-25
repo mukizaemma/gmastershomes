@@ -124,16 +124,21 @@
                         </div>
                     </div>
                     <div class="row g-3 mb-3">
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <label class="form-label">Price ({{ price_currency_label($setting) }} / night) <span class="text-danger">*</span></label>
                             <input type="number" class="form-control" id="room_price" name="price" min="0" step="1" required>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
+                            <label class="form-label">Monthly price ({{ price_currency_label($setting) }})</label>
+                            <input type="number" class="form-control" id="room_monthly_price" name="monthly_price" min="0" step="1" placeholder="Long stay">
+                            <small class="text-muted">Shown on the room page only.</small>
+                        </div>
+                        <div class="col-md-3">
                             <label class="form-label">Rooms of this type <span class="text-danger">*</span></label>
                             <input type="number" class="form-control" id="room_number_of_rooms" name="number_of_rooms" min="1" max="200" value="1" required>
                             <small class="text-muted">Inventory count (e.g. 31 singles).</small>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <label class="form-label">Max guests / room <span class="text-danger">*</span></label>
                             <input type="number" class="form-control" id="room_max_occupancy" name="max_occupancy" min="1" max="20" value="2" required>
                         </div>
@@ -289,6 +294,7 @@ function resetForm() {
     form.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
     document.querySelectorAll('input[name="amenities[]"]').forEach(cb => cb.checked = false);
     document.getElementById('room_price').value = '';
+    document.getElementById('room_monthly_price').value = '';
     document.getElementById('room_number_of_rooms').value = '1';
     document.getElementById('room_max_occupancy').value = '2';
     document.getElementById('room_status').value = 'Active';
@@ -315,6 +321,7 @@ function editRoom(id) {
                 CmsSummernote.setCode('#room_description', data.description || '');
             }
             document.getElementById('room_price').value = data.price ?? '';
+            document.getElementById('room_monthly_price').value = (__roomAdminPriceIsRwf ? data.monthly_price_rwf : data.monthly_price) ?? '';
             document.getElementById('room_bed_type').value = data.bed_type || '';
             document.getElementById('room_number_of_rooms').value = data.number_of_rooms ?? 1;
             document.getElementById('room_max_occupancy').value = data.max_occupancy ?? 2;

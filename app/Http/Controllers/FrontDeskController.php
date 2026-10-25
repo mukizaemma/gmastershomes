@@ -594,6 +594,8 @@ class FrontDeskController extends Controller
         $data = $request->validate([
             'price' => 'required|numeric|min:0',
             'price_rwf' => 'nullable|numeric|min:0',
+            'monthly_price' => 'nullable|numeric|min:0',
+            'monthly_price_rwf' => 'nullable|numeric|min:0',
             'rates' => 'nullable|array',
             'rates.*.single' => 'nullable|numeric|min:0',
             'rates.*.double' => 'nullable|numeric|min:0',
@@ -606,6 +608,8 @@ class FrontDeskController extends Controller
 
         $room->price = round((float) $data['price'], 2);
         $room->price_rwf = $request->filled('price_rwf') ? round((float) $data['price_rwf'], 2) : null;
+        $room->monthly_price = $request->filled('monthly_price') ? round((float) $data['monthly_price'], 2) : null;
+        $room->monthly_price_rwf = $request->filled('monthly_price_rwf') ? round((float) $data['monthly_price_rwf'], 2) : null;
         $room->rate_plans = $this->ratePlansFromRequest($request);
         $room->save();
 

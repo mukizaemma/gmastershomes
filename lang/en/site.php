@@ -342,6 +342,8 @@ return [
         'back_to_rooms' => 'All rooms',
         'from' => 'From',
         'per_night' => '/ night',
+        'per_month' => '/ month',
+        'long_stay' => 'Longer stay',
         'price_note' => 'Breakfast is included. The nightly rate is confirmed when you book.',
         'studio_note' => 'A short stay includes breakfast. On a longer stay, you can prepare your own meals in the kitchen, with water, electricity, internet and cleaning included. The rate is confirmed when you book.',
         'book_lead' => 'Book the house directly. Nothing is charged on this page.',
