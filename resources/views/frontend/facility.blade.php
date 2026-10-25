@@ -2,20 +2,11 @@
 
 
 @php
-    $facilityHeroImage = '';
-    if ($facility && $facility->cover_image) {
-        $facilityHeroImage = asset('storage/' . $facility->cover_image);
-    } elseif ($about && $about?->image2) {
-        if (strpos($about?->image2, '/') !== false || strpos($about?->image2, 'abouts') === 0) {
-            $facilityHeroImage = asset('storage/' . $about?->image2);
-        } else {
-            $facilityHeroImage = asset('storage/images/about/' . $about?->image2);
-        }
-    } else {
-        $facilityHeroImage = asset('storage/images/about/default.jpg');
-    }
+    $facilityHeroImage = ($facility && filled($facility->cover_image))
+        ? asset('storage/' . $facility->cover_image)
+        : null;
 @endphp
-    <div class="rts__section page__hero__height page__hero__bg" style="background-image: url({{ $facilityHeroImage }}); background-size: cover; background-position: center; background-repeat: no-repeat;">
+    <div class="rts__section page__hero__height page__hero__bg {{ $facilityHeroImage ? '' : 'page__hero__bg--brand' }}" @if($facilityHeroImage) style="background-image: url({{ $facilityHeroImage }}); background-size: cover; background-position: center; background-repeat: no-repeat;" @endif>
         <div class="container">
             <div class="row align-items-center justify-content-center">
                 <div class="col-lg-12">

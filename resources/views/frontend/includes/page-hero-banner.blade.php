@@ -2,22 +2,13 @@
 @php
     $heroCaption = $defaultCaption ?? 'Page';
     $heroDescription = $defaultDescription ?? '';
-    $heroImage = '';
-    if ($pageHero && !empty($pageHero->background_image)) {
-        $heroImage = asset('storage/' . $pageHero->background_image);
+    $heroImage = page_hero_background($pageHero ?? null);
+    if ($heroImage) {
         $heroCaption = $pageHero->caption ?: $heroCaption;
         $heroDescription = $pageHero->description ?? $heroDescription;
-    } elseif ($about && $about->image2) {
-        if (strpos($about->image2, '/') !== false || strpos($about->image2, 'abouts') === 0) {
-            $heroImage = asset('storage/' . $about->image2);
-        } else {
-            $heroImage = asset('storage/images/about/' . $about->image2);
-        }
-    } else {
-        $heroImage = asset('storage/images/about/default.jpg');
     }
 @endphp
-<div class="rts__section page__hero__height page__hero__bg" style="background-image: url({{ $heroImage }}); background-size: cover; background-position: center; background-repeat: no-repeat;">
+<div class="rts__section page__hero__height page__hero__bg {{ $heroImage ? '' : 'page__hero__bg--brand' }}" @if($heroImage) style="background-image: url({{ $heroImage }}); background-size: cover; background-position: center; background-repeat: no-repeat;" @endif>
     <div class="container">
         <div class="row align-items-center justify-content-center">
             <div class="col-lg-12">

@@ -11,18 +11,11 @@
         $heroDescription = site_trans($i18n . '.hero_lead');
     }
 
-    $heroImage = '';
-    if ($pageHero && !empty($pageHero->background_image)) {
-        $heroImage = asset('storage/' . $pageHero->background_image);
+    $heroImage = page_hero_background($pageHero ?? null);
+    if ($heroImage) {
         $heroCaption = $pageHero->caption ?: $heroCaption;
-    } elseif ($page && $page->cover_image) {
+    } elseif ($page && filled($page->cover_image)) {
         $heroImage = asset('storage/' . $page->cover_image);
-    } elseif ($about && $about->image2) {
-        $heroImage = (strpos($about->image2, '/') !== false || strpos($about->image2, 'abouts') === 0)
-            ? asset('storage/' . $about->image2)
-            : asset('storage/images/about/' . $about->image2);
-    } else {
-        $heroImage = asset('storage/images/about/default.jpg');
     }
 
     $activitiesEyebrow = site_trans($i18n . '.activities_eyebrow');
@@ -30,7 +23,7 @@
     $ctaType = $ctaType ?? 'official';
 @endphp
 
-<div class="explore-sanctuary-hero rts__section page__hero__height page__hero__bg" style="background-image: url({{ $heroImage }});">
+<div class="explore-sanctuary-hero rts__section page__hero__height page__hero__bg {{ $heroImage ? '' : 'page__hero__bg--brand' }}" @if($heroImage) style="background-image: url({{ $heroImage }});" @endif>
     <div class="explore-sanctuary-hero__overlay" aria-hidden="true"></div>
     <div class="container position-relative">
         <div class="row align-items-center justify-content-center">

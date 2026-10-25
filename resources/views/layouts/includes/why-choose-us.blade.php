@@ -1,33 +1,12 @@
 @if(isset($whyChooseUsItems) && $whyChooseUsItems->isNotEmpty())
 @php
     $wcuLayout = $whyChooseUsLayout ?? 'full';
-    $wcuSlide = \App\Models\Slide::query()
-        ->whereNotNull('image')
-        ->where('image', '!=', '')
-        ->orderBy('sort_order')
-        ->orderBy('id')
-        ->first();
-    $wcuBgUrl = $wcuSlide
-        ? asset('storage/' . $wcuSlide->image)
-        : asset('storage/images/about/default.jpg');
-    if ($about && filled($about->image2)) {
-        if (strpos($about->image2, '/') !== false || strpos($about->image2, 'abouts') === 0) {
-            $wcuBgUrl = asset('storage/' . $about->image2);
-        } else {
-            $wcuBgUrl = asset('storage/images/about/' . $about->image2);
-        }
-    }
     $wcuCardColClass = $wcuLayout === 'meetings' ? 'col-6' : 'col-12 col-sm-6 col-xl-3';
 @endphp
 @if($wcuLayout === 'meetings')
 <div class="site-why-choose-parallax-wrap site-why-choose-parallax-wrap--meetings">
 @else
-<div
-    class="site-why-choose-parallax-wrap jarallax"
-    data-speed="0.5"
-    style="--wcu-bg-fallback: url('{{ $wcuBgUrl }}')"
->
-    <img class="jarallax-img" src="{{ $wcuBgUrl }}" alt="" loading="lazy" decoding="async" width="1920" height="1080">
+<div class="site-why-choose-parallax-wrap gm-brand-bg">
     <div class="site-why-choose__veil" aria-hidden="true"></div>
 @endif
 

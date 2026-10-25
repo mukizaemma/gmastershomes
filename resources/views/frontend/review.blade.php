@@ -1,19 +1,7 @@
 <div class="public-livewire-page">
 
 <!-- Page Header -->
-@php
-    $heroImage2 = '';
-    if ($about && $about?->image2) {
-        if (strpos($about?->image2, '/') !== false || strpos($about?->image2, 'abouts') === 0) {
-            $heroImage2 = asset('storage/' . $about?->image2);
-        } else {
-            $heroImage2 = asset('storage/images/about/' . $about?->image2);
-        }
-    } else {
-        $heroImage2 = asset('storage/images/about/default.jpg');
-    }
-@endphp
-<div class="rts__section page__hero__height page__hero__bg" style="background-image: url({{ $heroImage2 }}); background-size: cover; background-position: center; background-repeat: no-repeat;">
+<div class="rts__section page__hero__height page__hero__bg page__hero__bg--brand">
     <div class="container">
         <div class="row align-items-center justify-content-center">
             <div class="col-lg-12">

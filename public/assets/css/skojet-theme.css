@@ -1204,18 +1204,18 @@ a.text-primary {
 
 .site-footer--skojet .site-footer__logo-link {
     display: inline-flex;
-    padding: 0.4rem;
-    background: #FFFFFF;
+    padding: 0;
+    background: transparent;
     border: none;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 16px 40px rgba(16, 30, 54, 0.35);
+    border-radius: 0;
+    overflow: visible;
+    box-shadow: none;
 }
 
 .site-footer--skojet .site-footer__logo {
     max-height: 128px;
     filter: none;
-    border-radius: 8px;
+    border-radius: 0;
 }
 
 .site-footer--skojet .site-footer__tagline {
@@ -1826,18 +1826,8 @@ a.text-primary {
 
 /* Why Choose Skojet — photo behind the section, cards with no fill */
 .site-why-choose-parallax-wrap:not(.site-why-choose-parallax-wrap--meetings) {
-    background-color: #111 !important;
     border-top: none;
     min-height: 0;
-}
-
-.site-why-choose-parallax-wrap:not(.site-why-choose-parallax-wrap--meetings) .site-why-choose__veil {
-    background: linear-gradient(
-        180deg,
-        rgba(0, 0, 0, 0.52) 0%,
-        rgba(0, 0, 0, 0.38) 48%,
-        rgba(0, 0, 0, 0.58) 100%
-    ) !important;
 }
 
 .site-why-choose-parallax-wrap:not(.site-why-choose-parallax-wrap--meetings) .site-why-choose__heading {
@@ -3475,6 +3465,33 @@ a.text-primary {
 
 .page__hero__bg {
     background-color: var(--brand-primary);
+}
+
+.gm-brand-bg,
+.page__hero__bg.page__hero__bg--brand {
+    background-color: var(--brand-primary) !important;
+    background-image:
+        radial-gradient(ellipse at 18% 0%, rgba(255, 255, 255, 0.18), transparent 46%),
+        linear-gradient(165deg, #2A4A78 0%, var(--brand-primary) 52%, var(--brand-primary-dark) 100%) !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+}
+
+.page__hero__bg:not(.page__hero__bg--brand)::before {
+    background: linear-gradient(
+        180deg,
+        rgba(16, 30, 54, 0.42) 0%,
+        rgba(16, 30, 54, 0.16) 46%,
+        rgba(16, 30, 54, 0.5) 100%
+    ) !important;
+}
+
+.page__hero__bg.page__hero__bg--brand::before,
+.site-why-choose-parallax-wrap.gm-brand-bg .site-why-choose__veil {
+    background:
+        radial-gradient(ellipse 55% 80% at 0% 100%, rgba(255, 255, 255, 0.06), transparent 55%),
+        radial-gradient(circle at 100% 0%, rgba(255, 255, 255, 0.05), transparent 42%) !important;
 }
 
 .gm-wordmark {

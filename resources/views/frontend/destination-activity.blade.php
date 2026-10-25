@@ -1,16 +1,10 @@
 <div class="public-livewire-page destination-activity-page">
 @php
     $i18n = $translationPrefix ?? 'sanctuary';
-    $heroImage = filled($activity->image)
-        ? asset('storage/' . $activity->image)
-        : (($about && $about->image2)
-            ? (str_contains($about->image2, '/') || str_starts_with($about->image2, 'abouts')
-                ? asset('storage/' . $about->image2)
-                : asset('storage/images/about/' . $about->image2))
-            : asset('storage/images/about/default.jpg'));
+    $heroImage = filled($activity->image) ? asset('storage/' . $activity->image) : null;
 @endphp
 
-<div class="rts__section page__hero__height page__hero__bg" style="background-image: url({{ $heroImage }});">
+<div class="rts__section page__hero__height page__hero__bg {{ $heroImage ? '' : 'page__hero__bg--brand' }}" @if($heroImage) style="background-image: url({{ $heroImage }});" @endif>
     <div class="container">
         <div class="row align-items-center justify-content-center">
             <div class="col-lg-10 col-xl-8 text-center">

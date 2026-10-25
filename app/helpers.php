@@ -84,6 +84,21 @@ if (! function_exists('hotel_price')) {
     }
 }
 
+if (! function_exists('page_hero_background')) {
+    /**
+     * Photo uploaded for this page's hero. Other pages use the homepage navy panel.
+     */
+    function page_hero_background(?object $pageHero = null): ?string
+    {
+        $path = trim((string) ($pageHero->background_image ?? ''));
+        if ($path === '') {
+            return null;
+        }
+
+        return asset('storage/' . ltrim($path, '/'));
+    }
+}
+
 if (! function_exists('hotel_has_public_rate')) {
     function hotel_has_public_rate(?\App\Models\Room $room): bool
     {

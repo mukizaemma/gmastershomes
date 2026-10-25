@@ -6,17 +6,11 @@
     $heroDescription = $pageHero?->description
         ?? 'Relaxing massages, therapies and wellness experiences to recharge during your stay.';
 
-    if ($pageHero && $pageHero?->background_image) {
-        $heroImage = asset('storage/' . $pageHero?->background_image);
-    } elseif ($about && $about?->image2) {
-        $heroImage = asset('storage/' . $about?->image2);
-    } else {
-        $heroImage = asset('storage/images/about/default.jpg');
-    }
+    $heroImage = page_hero_background($pageHero ?? null);
 @endphp
 
-<div class="rts__section page__hero__height page__hero__bg"
-     style="background-image: url({{ $heroImage }}); background-size: cover; background-position: center; background-repeat: no-repeat;">
+<div class="rts__section page__hero__height page__hero__bg {{ $heroImage ? '' : 'page__hero__bg--brand' }}"
+     @if($heroImage) style="background-image: url({{ $heroImage }}); background-size: cover; background-position: center; background-repeat: no-repeat;" @endif>
     <div class="container">
         <div class="row align-items-center justify-content-center">
             <div class="col-lg-12">

@@ -4,9 +4,7 @@
     $page = $diocesePage;
     $heroImage = $page->header_image
         ? asset('storage/' . $page->header_image)
-        : ($pageHero && !empty($pageHero->background_image)
-            ? asset('storage/' . $pageHero->background_image)
-            : asset('storage/images/about/default.jpg'));
+        : page_hero_background($pageHero ?? null);
     $heroCaption = $page->title ?? site_trans('gikongoro.title');
     $mainImage = $page->profile_image
         ? asset('storage/' . $page->profile_image)
@@ -19,7 +17,7 @@
         : null;
 @endphp
 
-<div class="gikongoro-hero rts__section page__hero__height page__hero__bg" style="background-image: url({{ $heroImage }});">
+<div class="gikongoro-hero rts__section page__hero__height page__hero__bg {{ $heroImage ? '' : 'page__hero__bg--brand' }}" @if($heroImage) style="background-image: url({{ $heroImage }});" @endif>
     <div class="gikongoro-hero__overlay" aria-hidden="true"></div>
     <div class="container position-relative">
         <div class="row align-items-center justify-content-center">
@@ -75,7 +73,7 @@
 </section>
 
 @if(isset($dioceseStats) && $dioceseStats->isNotEmpty())
-<section class="gikongoro-stats rts__section" style="background-image: url({{ $statsBg }});">
+<section class="gikongoro-stats rts__section {{ $statsBg ? '' : 'gm-brand-bg' }}" @if($statsBg) style="background-image: url({{ $statsBg }});" @endif>
     <div class="gikongoro-stats__overlay" aria-hidden="true"></div>
     <div class="container position-relative">
         <header class="gikongoro-stats__header text-center">
