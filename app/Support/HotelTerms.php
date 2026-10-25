@@ -28,9 +28,8 @@ class HotelTerms
 <section class="terms-doc__block terms-doc__block--wide">
 <h2>Check-in / Check-out</h2>
 <ul>
-<li>Check-in: <strong>2:00 p.m.</strong></li>
-<li>Check-out: <strong>11:00 a.m.</strong></li>
-<li>Earlier arrival or a later departure can be arranged when the room is free.</li>
+<li>For a short stay, check-in can be at any time before <strong>2:00 a.m.</strong></li>
+<li>Check-out is at <strong>10:00 a.m.</strong></li>
 </ul>
 </section>
 <section class="terms-doc__block">
@@ -54,7 +53,6 @@ class HotelTerms
 <ul>
 <li>If the reserved room is unavailable, another room in the house may be offered.</li>
 <li>Changes to a reservation should be sent in writing, by email or WhatsApp.</li>
-<li><strong>Jurisdiction:</strong> Kigali, Rwanda.</li>
 </ul>
 </section>
 <section class="terms-doc__close">
@@ -75,6 +73,9 @@ HTML;
 
         return str_contains($html, 'terms-doc__address')
             || str_contains($html, 'terms-doc__contacts')
-            || str_contains($html, 'with every stay');
+            || str_contains($html, 'with every stay')
+            || str_contains($html, 'Jurisdiction')
+            || str_contains($html, '2:00 p.m.')
+            || str_contains($html, '11:00 a.m.');
     }
 }

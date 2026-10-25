@@ -8,13 +8,12 @@
 <div class="desk-app__body">
         @include('content-management.front-office.partials.alerts')
         <h4 class="mb-2">Rates management</h4>
-        <p class="text-muted">Set each suite’s nightly rate, board prices, and date discounts. Close a suite when it cannot be sold.</p>
+        <p class="text-muted">Set each room’s nightly rate and date discounts. Breakfast is part of the stay, so there are no half-board or full-board prices. Close a room when it cannot be booked.</p>
 
         <section id="prices" class="mb-4">
             <h5 class="mb-1">Room prices</h5>
-            <p class="text-muted small">Set a dollar rate and a franc rate for each suite. A reservation uses one of those currencies for the room and for every extra on the bill. Leave a price blank to keep that currency off the booking page. A percent discount applies to both currencies. A fixed discount needs its own dollar amount and franc amount.</p>
+            <p class="text-muted small">Set a dollar rate and a franc rate for each room. A reservation uses one of those currencies. Leave a price blank to keep that currency off the booking page.</p>
             @foreach($rooms as $room)
-                @php $plans = $room->ratePlans(); @endphp
                 <form method="POST" action="{{ route('content-management.front-office.settings.rates', $room) }}" class="bg-white border rounded p-4 mb-3">
                     @csrf
                     <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
@@ -32,57 +31,6 @@
                             <label class="form-label">Standard nightly rate (RWF)</label>
                             <input type="number" class="form-control" name="price_rwf" min="0" step="1" value="{{ $room->price_rwf }}" placeholder="—">
                         </div>
-                    </div>
-                    <div class="table-responsive">
-                        <table class="table table-sm align-middle mb-0">
-                            <thead>
-                                <tr>
-                                    <th>Board</th>
-                                    <th>Single ($)</th>
-                                    <th>Single (RWF)</th>
-                                    <th>Double ($)</th>
-                                    <th>Double (RWF)</th>
-                                    <th>Discount</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach([
-                                    'bed_breakfast' => ['Bed & breakfast', 'Breakfast only'],
-                                    'half_board' => ['Half board', 'Breakfast and dinner'],
-                                    'full_board' => ['Full board', 'Breakfast, lunch and dinner'],
-                                ] as $planKey => [$planLabel, $planNote])
-                                    <tr>
-                                        <td>
-                                            <strong>{{ $planLabel }}</strong>
-                                            <div class="small text-muted">{{ $planNote }}</div>
-                                        </td>
-                                        <td style="min-width: 7rem;">
-                                            <input type="number" class="form-control" name="rates[{{ $planKey }}][single]" min="0" step="1" value="{{ $plans[$planKey]['single'] }}" placeholder="—">
-                                        </td>
-                                        <td style="min-width: 7rem;">
-                                            <input type="number" class="form-control" name="rates[{{ $planKey }}][single_rwf]" min="0" step="1" value="{{ $plans[$planKey]['single_rwf'] }}" placeholder="—">
-                                        </td>
-                                        <td style="min-width: 7rem;">
-                                            <input type="number" class="form-control" name="rates[{{ $planKey }}][double]" min="0" step="1" value="{{ $plans[$planKey]['double'] }}" placeholder="—">
-                                        </td>
-                                        <td style="min-width: 7rem;">
-                                            <input type="number" class="form-control" name="rates[{{ $planKey }}][double_rwf]" min="0" step="1" value="{{ $plans[$planKey]['double_rwf'] }}" placeholder="—">
-                                        </td>
-                                        <td style="min-width: 16rem;">
-                                            <div class="d-flex flex-column gap-2">
-                                                <select class="form-select" name="rates[{{ $planKey }}][discount_type]">
-                                                    <option value="">None</option>
-                                                    <option value="percent" @selected($plans[$planKey]['discount_type'] === 'percent')>Percent</option>
-                                                    <option value="amount" @selected($plans[$planKey]['discount_type'] === 'amount')>Amount</option>
-                                                </select>
-                                                <input type="number" class="form-control" name="rates[{{ $planKey }}][discount_value]" min="0" step="0.01" value="{{ $plans[$planKey]['discount_value'] }}" placeholder="% or $">
-                                                <input type="number" class="form-control" name="rates[{{ $planKey }}][discount_value_rwf]" min="0" step="1" value="{{ $plans[$planKey]['discount_value_rwf'] }}" placeholder="RWF amount">
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
                     </div>
                     <button class="btn btn-dark mt-3" type="submit">Save {{ $room->title }} rates</button>
                 </form>

@@ -531,7 +531,7 @@ return [
         'channel_send_email' => 'Send by email',
         'channel_send_whatsapp' => 'Send on WhatsApp',
         'channel_policies' => 'Policies',
-        'channel_policy' => 'We confirm your room directly. Nothing is charged on this page. Check-in is from 2:00 pm and check-out is by 11:00 am.',
+        'channel_policy' => 'We confirm your room directly. Nothing is charged on this page. For a short stay, check-in can be at any time before 2:00 a.m. Check-out is at 10:00 a.m.',
         'channel_email_note' => 'Use an email address that can receive messages. We send the confirmation there.',
         'channel_first_name' => 'First name',
         'channel_last_name' => 'Last name',

@@ -139,52 +139,6 @@
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Board and occupancy rates</label>
-                        <p class="text-muted small mb-2">Set single and double occupancy for each board. Leave a board blank to keep it off the website. A discount can be a fixed amount or a percentage off those rates.</p>
-                        <div class="table-responsive">
-                            <table class="table table-sm align-middle mb-0">
-                                <thead>
-                                    <tr>
-                                        <th>Board</th>
-                                        <th>Single occupancy</th>
-                                        <th>Double occupancy</th>
-                                        <th>Discount</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach([
-                                        'bed_breakfast' => ['Bed & breakfast', 'Breakfast only'],
-                                        'half_board' => ['Half board', 'Breakfast and dinner'],
-                                        'full_board' => ['Full board', 'Breakfast, lunch and dinner'],
-                                    ] as $planKey => [$planLabel, $planNote])
-                                    <tr>
-                                        <td>
-                                            <strong>{{ $planLabel }}</strong>
-                                            <div class="small text-muted">{{ $planNote }}</div>
-                                        </td>
-                                        <td style="min-width: 8rem;">
-                                            <input type="number" class="form-control" id="rate_{{ $planKey }}_single" name="rates[{{ $planKey }}][single]" min="0" step="1" placeholder="—">
-                                        </td>
-                                        <td style="min-width: 8rem;">
-                                            <input type="number" class="form-control" id="rate_{{ $planKey }}_double" name="rates[{{ $planKey }}][double]" min="0" step="1" placeholder="—">
-                                        </td>
-                                        <td style="min-width: 14rem;">
-                                            <div class="d-flex gap-2">
-                                                <select class="form-control" id="rate_{{ $planKey }}_discount_type" name="rates[{{ $planKey }}][discount_type]">
-                                                    <option value="">None</option>
-                                                    <option value="percent">Percent</option>
-                                                    <option value="amount">Amount</option>
-                                                </select>
-                                                <input type="number" class="form-control" id="rate_{{ $planKey }}_discount_value" name="rates[{{ $planKey }}][discount_value]" min="0" step="0.01" placeholder="0">
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="mb-3">
                         <label class="form-label">Description</label>
                         <textarea class="form-control" id="room_description" name="description" rows="6" placeholder="Enter room description..."></textarea>
                         <small class="text-muted">Use the rich text editor toolbar to format your room description with styles, colors, lists, and more</small>
@@ -339,12 +293,6 @@ function resetForm() {
     document.getElementById('room_max_occupancy').value = '2';
     document.getElementById('room_status').value = 'Active';
     document.getElementById('room_bed_type').value = '';
-    ['bed_breakfast', 'half_board', 'full_board'].forEach(function (key) {
-        document.getElementById('rate_' + key + '_single').value = '';
-        document.getElementById('rate_' + key + '_double').value = '';
-        document.getElementById('rate_' + key + '_discount_type').value = '';
-        document.getElementById('rate_' + key + '_discount_value').value = '';
-    });
     clearRoomCurrentMedia();
     // Reset Summernote
     if (window.CmsSummernote) {
@@ -368,13 +316,6 @@ function editRoom(id) {
             }
             document.getElementById('room_price').value = data.price ?? '';
             document.getElementById('room_bed_type').value = data.bed_type || '';
-            ['bed_breakfast', 'half_board', 'full_board'].forEach(function (key) {
-                const plan = (data.rate_plans && data.rate_plans[key]) ? data.rate_plans[key] : {};
-                document.getElementById('rate_' + key + '_single').value = plan.single ?? '';
-                document.getElementById('rate_' + key + '_double').value = plan.double ?? '';
-                document.getElementById('rate_' + key + '_discount_type').value = plan.discount_type || '';
-                document.getElementById('rate_' + key + '_discount_value').value = plan.discount_value ?? '';
-            });
             document.getElementById('room_number_of_rooms').value = data.number_of_rooms ?? 1;
             document.getElementById('room_max_occupancy').value = data.max_occupancy ?? 2;
             document.getElementById('room_status').value = data.status || 'Active';
