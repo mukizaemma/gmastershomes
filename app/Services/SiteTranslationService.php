@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Lang;
 
 class SiteTranslationService
 {
-    private const CACHE_VERSION = 'v1';
+    private const CACHE_VERSION = 'v2';
 
     public function get(string $key, array $replace = [], ?string $locale = null): string
     {

@@ -31,7 +31,7 @@ class SitemapBuilder
         '/apartment' => ['priority' => '0.7', 'changefreq' => 'monthly'],
         '/guesthouse' => ['priority' => '0.7', 'changefreq' => 'monthly'],
         '/facilities' => ['priority' => '0.8', 'changefreq' => 'monthly'],
-        '/activities' => ['priority' => '0.8', 'changefreq' => 'weekly'],
+        '/tours-and-safaris' => ['priority' => '0.8', 'changefreq' => 'weekly'],
         '/meetings-events' => ['priority' => '0.7', 'changefreq' => 'monthly'],
         '/spa-wellness' => ['priority' => '0.7', 'changefreq' => 'monthly'],
         '/terms-and-conditions' => ['priority' => '0.4', 'changefreq' => 'yearly'],
@@ -99,7 +99,7 @@ class SitemapBuilder
                 ->orderBy('id')
                 ->get(['slug', 'updated_at'])
                 ->each(fn ($activity) => $this->addLocalizedPath(
-                    '/activities/'.$activity->slug,
+                    '/tours-and-safaris/'.$activity->slug,
                     $activity->updated_at,
                     'monthly',
                     '0.6'

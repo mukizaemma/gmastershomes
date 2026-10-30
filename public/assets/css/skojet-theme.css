@@ -3286,6 +3286,35 @@ a.text-primary {
     color: inherit !important;
 }
 
+.activity-show__submit {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    align-items: stretch;
+}
+
+.activity-show__submit.is-single {
+    grid-template-columns: 1fr;
+}
+
+.activity-show__submit .theme-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 3.1rem;
+    text-align: center;
+    text-decoration: none;
+}
+
+.activity-show .activity-show__whatsapp.theme-btn.btn-style.fill,
+.activity-show .activity-show__whatsapp.theme-btn.btn-style.fill:hover,
+.activity-show .activity-show__whatsapp.theme-btn.btn-style.fill:focus-visible {
+    background: #128c7e !important;
+    border-color: #128c7e !important;
+    color: #fff !important;
+}
+
 .activity-show__more {
     padding: 0 0 4rem;
 }

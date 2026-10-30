@@ -101,9 +101,28 @@
                         ])
                     </div>
 
-                    <button type="submit" class="theme-btn btn-style fill">
-                        <span>{{ site_trans('booking.activity_submit') }}</span>
-                    </button>
+                    <p id="tour-request-error" class="recent-request__bad" hidden></p>
+                    <div class="activity-show__submit {{ \App\Services\SiteNotificationMail::resendConfigured() ? '' : 'is-single' }}">
+                        @if(\App\Services\SiteNotificationMail::resendConfigured())
+                            <button type="submit" class="theme-btn btn-style fill">
+                                <span><i class="fa-solid fa-envelope" aria-hidden="true"></i> {{ site_trans('booking.activity_submit') }}</span>
+                            </button>
+                        @endif
+                        <a
+                            id="tour-whatsapp-submit"
+                            class="theme-btn btn-style fill activity-show__whatsapp"
+                            href="#"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            data-no-spa-navigate
+                            data-digits="{{ hotel_whatsapp_digits() }}"
+                            data-hotel="{{ config('app.name') }}"
+                            data-missing="{{ site_trans('booking.activity_whatsapp_missing') }}"
+                            data-tours-required="{{ site_trans('booking.activity_tours_required') }}"
+                        >
+                            <span><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> {{ site_trans('booking.activity_submit_whatsapp') }}</span>
+                        </a>
+                    </div>
                 </form>
             </aside>
         </div>
@@ -129,3 +148,108 @@
         </section>
     @endif
 </div>
+<script>
+(function () {
+    if (window.__tourWhatsappBound) {
+        return;
+    }
+    window.__tourWhatsappBound = true;
+
+    document.addEventListener('click', function (event) {
+        var link = event.target.closest('#tour-whatsapp-submit');
+        if (!link) {
+            return;
+        }
+
+        var form = document.getElementById('tour-request-form');
+        if (!form) {
+            event.preventDefault();
+            return;
+        }
+
+        var notice = document.getElementById('tour-request-error');
+        if (notice) {
+            notice.hidden = true;
+            notice.textContent = '';
+        }
+
+        var boxes = form.querySelectorAll('input[name="activity_ids[]"]');
+        var checked = form.querySelectorAll('input[name="activity_ids[]"]:checked');
+        if (boxes.length && !checked.length) {
+            if (notice) {
+                notice.hidden = false;
+                notice.textContent = link.getAttribute('data-tours-required') || 'Choose at least one tour.';
+            }
+            event.preventDefault();
+            return;
+        }
+
+        if (!form.reportValidity()) {
+            event.preventDefault();
+            return;
+        }
+
+        var digits = (link.getAttribute('data-digits') || '').replace(/\D+/g, '');
+        if (!digits) {
+            window.alert(link.getAttribute('data-missing') || 'WhatsApp number is missing.');
+            event.preventDefault();
+            return;
+        }
+
+        function labelFor(el) {
+            var wrap = el.closest('label');
+            var title = wrap ? wrap.querySelector('span') : null;
+            return title ? title.textContent.replace('*', '').trim() : '';
+        }
+
+        function valueFor(name) {
+            var el = form.elements[name];
+            if (!el || el.type === 'checkbox') {
+                return '';
+            }
+            if (el.tagName === 'SELECT') {
+                var option = el.options[el.selectedIndex];
+                return option ? option.text.trim() : '';
+            }
+            return (el.value || '').trim();
+        }
+
+        var lines = ['Hello ' + (link.getAttribute('data-hotel') || '') + ',', '', 'I would like to request a tour.'];
+        ['names', 'phone', 'email', 'activity_start', 'activity_end', 'guests', 'accommodation_preference', 'transport_preference', 'destinations', 'notes'].forEach(function (name) {
+            var el = form.elements[name];
+            var value = valueFor(name);
+            if (!el || value === '') {
+                return;
+            }
+            lines.push(labelFor(el) + ': ' + value);
+        });
+
+        var tours = [];
+        checked.forEach(function (box) {
+            var wrap = box.closest('label');
+            var title = wrap ? wrap.querySelector('span') : null;
+            if (title) {
+                tours.push(title.textContent.trim());
+            }
+        });
+        if (tours.length) {
+            var legend = form.querySelector('.activity-show__choices') ? form.querySelector('fieldset legend') : null;
+            lines.push((legend ? legend.textContent.replace('*', '').trim() : 'Tours') + ': ' + tours.join(', '));
+        }
+
+        link.href = 'https://wa.me/' + digits + '?text=' + encodeURIComponent(lines.join('\n'));
+
+        var body = new FormData(form);
+        body.append('submit_via', 'whatsapp');
+        fetch(form.action, {
+            method: 'POST',
+            body: body,
+            credentials: 'same-origin',
+            headers: {
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        }).catch(function () {});
+    });
+})();
+</script>

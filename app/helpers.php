@@ -526,6 +526,41 @@ if (! function_exists('localized_route')) {
     }
 }
 
+if (! function_exists('hosting_alert')) {
+    /**
+     * Issues the October invoice when it is due, sends a renewal email once per stage, and returns a dashboard notice.
+     *
+     * @return array{level: string, title: string, message: string}|null
+     */
+    function hosting_alert(): ?array
+    {
+        static $resolved = false;
+        static $alert = null;
+
+        if ($resolved) {
+            return $alert;
+        }
+
+        $resolved = true;
+
+        try {
+            if (! \Illuminate\Support\Facades\Schema::hasTable('hosting_invoices')) {
+                return null;
+            }
+
+            $billing = app(\App\Services\HostingBilling::class);
+            $billing->prepare();
+            $billing->remind();
+            $alert = $billing->alert();
+        } catch (\Throwable $e) {
+            report($e);
+            $alert = null;
+        }
+
+        return $alert;
+    }
+}
+
 if (! function_exists('locale_switch_url')) {
     function locale_switch_url(string $targetLocale): string
     {

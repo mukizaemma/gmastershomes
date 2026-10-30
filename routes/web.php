@@ -260,6 +260,14 @@ Route::middleware(['auth', 'admin'])->prefix('content-management')->name('conten
     Route::get('/reservations/{id}', [App\Http\Controllers\ContentManagementController::class, 'showReservationPage'])->name('reservations.show');
     Route::post('/reservations/{id}/reply', [App\Http\Controllers\ContentManagementController::class, 'replyReservation'])->name('reservations.reply');
     Route::delete('/reservations/{id}', [App\Http\Controllers\ContentManagementController::class, 'destroyReservation'])->name('reservations.destroy');
+
+    Route::get('/hosting', [App\Http\Controllers\HostingInvoiceController::class, 'index'])->name('hosting.index');
+    Route::post('/hosting/rates', [App\Http\Controllers\HostingInvoiceController::class, 'updateRates'])->name('hosting.rates');
+    Route::post('/hosting/exchange-rate', [App\Http\Controllers\HostingInvoiceController::class, 'updateExchangeRate'])->name('hosting.exchange-rate');
+    Route::get('/hosting/{invoice}', [App\Http\Controllers\HostingInvoiceController::class, 'show'])->name('hosting.show');
+    Route::get('/hosting/{invoice}/download', [App\Http\Controllers\HostingInvoiceController::class, 'download'])->name('hosting.download');
+    Route::post('/hosting/{invoice}/paid', [App\Http\Controllers\HostingInvoiceController::class, 'markPaid'])->name('hosting.paid');
+    Route::post('/hosting/{invoice}/remind', [App\Http\Controllers\HostingInvoiceController::class, 'remind'])->name('hosting.remind');
 });
 
 // Legacy Admin Routes (keeping for backward compatibility)
@@ -459,6 +467,14 @@ Route::redirect('/our-apartments', '/our-rooms', 301);
 Route::redirect('/fr/our-apartments', '/fr/our-rooms', 301);
 Route::redirect('/suites', '/our-rooms', 301);
 Route::redirect('/fr/suites', '/fr/our-rooms', 301);
+Route::redirect('/activities', '/tours-and-safaris', 301);
+Route::redirect('/fr/activities', '/fr/tours-and-safaris', 301);
+Route::get('/activities/{slug}', function (string $slug) {
+    return redirect('/tours-and-safaris/'.$slug, 301);
+})->where('slug', '[a-z0-9]+(?:-[a-z0-9]+)*');
+Route::get('/fr/activities/{slug}', function (string $slug) {
+    return redirect('/fr/tours-and-safaris/'.$slug, 301);
+})->where('slug', '[a-z0-9]+(?:-[a-z0-9]+)*');
 Route::get('/suites/{slug}', function (string $slug) {
     return redirect('/our-rooms/'.$slug, 301);
 })->where('slug', '[a-z0-9]+(?:-[a-z0-9]+)*');
@@ -505,8 +521,8 @@ $registerPublicSiteRoutes = function (bool $nameRoutes = true): void {
     $named(Route::get('/discover-gikongoro-diocese', $homeRedirect()), 'discover-gikongoro-diocese');
     $named(Route::get('/discover-nyaruguru', $homeRedirect()), 'discover-nyaruguru');
     $named(Route::get('/discover-nyaruguru/activities/{slug}', $homeRedirect()), 'discover-nyaruguru.activity');
-    $named(Route::get('/activities', ActivitiesPage::class), 'activities');
-    $named(Route::get('/activities/{slug}', ActivityShowPage::class), 'activity');
+    $named(Route::get('/tours-and-safaris', ActivitiesPage::class), 'activities');
+    $named(Route::get('/tours-and-safaris/{slug}', ActivityShowPage::class), 'activity');
     $named(Route::get('/meetings-events', EventsPage::class), 'meetings-events');
     $named(
         Route::get('/meetings-events/{slug}', MeetingRoomShowPage::class)

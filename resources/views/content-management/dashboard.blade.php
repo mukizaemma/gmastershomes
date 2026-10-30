@@ -34,6 +34,15 @@
         </div>
         @endif
 
+        @php $hostingAlert = hosting_alert(); @endphp
+        @if(! empty($hostingAlert))
+            <div class="alert alert-{{ $hostingAlert['level'] === 'danger' ? 'danger' : 'warning' }}" role="alert">
+                <strong>{{ $hostingAlert['title'] }}.</strong>
+                {{ $hostingAlert['message'] }}
+                <a href="{{ route('content-management.hosting.index') }}" class="alert-link">Open the hosting invoice</a>
+            </div>
+        @endif
+
         <div class="bg-white rounded shadow-sm p-4 mb-4">
             <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
                 <div>

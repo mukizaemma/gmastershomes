@@ -37,7 +37,7 @@
                             </td>
                             <td>
                                 <strong>{{ $activity->title }}</strong>
-                                <div class="small text-muted">/activities/{{ $activity->slug }}</div>
+                                <div class="small text-muted">/tours-and-safaris/{{ $activity->slug }}</div>
                             </td>
                             <td><span class="badge bg-{{ $activity->status == 'Active' ? 'success' : 'danger' }}">{{ $activity->status }}</span></td>
                             <td>{{ $activity->images->count() }} {{ Str::plural('image', $activity->images->count()) }}</td>

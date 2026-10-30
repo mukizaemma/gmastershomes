@@ -57,10 +57,16 @@ class SiteNotificationMail
         $emails[$email] = $email;
     }
 
-    private static function resendReady(): bool
+    public static function resendConfigured(): bool
     {
         $key = config('resend.api_key') ?? config('services.resend.key');
-        if (is_string($key) && trim($key) !== '') {
+
+        return is_string($key) && trim($key) !== '';
+    }
+
+    private static function resendReady(): bool
+    {
+        if (self::resendConfigured()) {
             return true;
         }
 

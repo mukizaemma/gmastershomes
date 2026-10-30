@@ -25,221 +25,202 @@
     <div class="container py-3 py-lg-4">
         <div class="handover-no-print d-flex flex-wrap gap-2 justify-content-between align-items-center mb-4 pb-3 border-bottom">
             <div>
-                <p class="small text-muted mb-0">Lucerna Kabgayi Hotel · Client handover</p>
-                <p class="small mb-0"><strong>KURRE Consultancy</strong></p>
+                <p class="small text-muted mb-0">GMasters Homes · Website handover</p>
+                <p class="small mb-0"><strong>Ireme Technologies</strong></p>
             </div>
-            <div class="d-flex gap-2">
-                <button type="button" class="theme-btn btn-style sm-btn fill handover-no-print" onclick="window.print()">
-                    <span><i class="fa-solid fa-print me-1" aria-hidden="true"></i> Print / Save as PDF</span>
-                </button>
-            </div>
+            <button type="button" class="theme-btn btn-style sm-btn fill" onclick="window.print()">
+                <span><i class="fa-solid fa-print me-1" aria-hidden="true"></i> Print / Save as PDF</span>
+            </button>
         </div>
 
         <header class="mb-4">
-            <h1 class="mb-3" style="font-size: clamp(1.5rem, 3vw, 2rem);">Client handover &amp; user guide</h1>
-            <p class="handover-lead text-muted mb-2">Your website — how to get access, manage content, and where booking and reviews fit in.</p>
-            <p class="small text-muted mb-0">Prepared for <strong>Lucerna Kabgayi Hotel</strong> · Document version for web &amp; print · Delivered with support from <strong>KURRE Consultancy</strong></p>
+            <h1 class="mb-3" style="font-size: clamp(1.5rem, 3vw, 2rem);">Website handover and admin guide</h1>
+            <p class="handover-lead text-muted mb-2">What this site is for, what guests can do, what the admin can do, how access is protected, and how the annual hosting invoice works.</p>
+            <p class="small text-muted mb-0">Prepared for <strong>GMasters Homes</strong> · 30 October 2026 · <strong>Ireme Technologies</strong></p>
         </header>
 
         <section class="mb-4 p-3 p-lg-4 rounded-3 border bg-light">
             <h2 class="h5 mb-2">About this project</h2>
-            <p class="mb-2"><strong>KURRE Consultancy</strong> partnered with Lucerna Kabgayi Hotel on a <strong>full-package online presence revamp</strong>: we helped build the website, develop professional content, and support photography at the property — including sharing <strong>quality images</strong> for use across the site. The goal was a credible, modern digital presence that reflects the hotel’s standards.</p>
-            <p class="mb-0">We remain available for <strong>future support</strong> so the hotel can stay ahead in the digital space as channels, content, and guest expectations evolve.</p>
+            <p class="mb-0">GMasters Homes is a guest house in Kabeza, Kigali. The website presents the house and its rooms, and it takes requests for stays and for tours and safaris in Rwanda and Uganda. Ireme Technologies built the site, looks after hosting, and remains available for support.</p>
         </section>
 
-        <div class="callout-training mb-4">
-            <p class="mb-2"><strong>Training &amp; further support</strong></p>
-            <p class="mb-0 small">Hotel <strong>management should plan a training session</strong> with KURRE Consultancy if this document is not sufficient on its own, or if the team needs <strong>more in-person walkthroughs</strong> and clarification beyond what is written here. A structured session helps ensure several staff members can confidently update content and understand booking and review workflows.</p>
-        </div>
+        <h2>1. What the website is for</h2>
+        <p>Guests use the site to look at the guest house, choose a room, and ask for a stay. They also use it to choose a tour or safari. Tour prices are sent after the team has the guest’s dates, group size, accommodation preference, destinations, and transport preference. The public site is available in English and French.</p>
+        <p>The admin area is where the team updates rooms, photos, tour text, and replies to requests. Hosting for the year is recorded there as an invoice.</p>
 
-        <h2>1. Introduction</h2>
-        <p>This guide explains what your Lucerna Kabgayi Hotel website is for, how your team can obtain a <strong>content-management</strong> account, where to sign in, how to update content, and why booking and guest reviews use trusted external platforms. Use the <strong>Print / Save as PDF</strong> button at the top (or your browser’s print function) to save a copy for your records.</p>
-        <p><strong>Share this page:</strong> <a href="https://lucernakabgayihotel.com/handover" target="_blank" rel="noopener noreferrer">https://lucernakabgayihotel.com/handover</a> — anyone with the link can read it; it is intended for your hotel team. The page is marked <strong>noindex</strong> so it is not meant to appear in search results.</p>
+        <h2>2. What has been done</h2>
+        <ul>
+            <li class="mb-2">Public pages for the guest house, rooms, gallery, contact, dining, team, and updates.</li>
+            <li class="mb-2">A Tours &amp; Safaris section with four packages, day-by-day itineraries, and a photo gallery on each tour.</li>
+            <li class="mb-2">Room requests and tour requests saved for the admin, with an email to the guest and the team when mail is configured.</li>
+            <li class="mb-2">A manage link and a cancel link in the guest email. Cancel asks for a reason and a second confirmation, and it stays open until the day before the start date.</li>
+            <li class="mb-2">A check that tells a guest when the same email address already sent a room or tour request in the last 7 days, and offers a new request or a fresh manage link.</li>
+            <li class="mb-2">Tour requests can be sent by email, or opened in WhatsApp with the details the guest typed.</li>
+            <li class="mb-2">An annual hosting invoice in the admin, created every 1 October, with download and renewal reminders.</li>
+            <li class="mb-0">This handover page for the team.</li>
+        </ul>
 
-        <h2>2. What this website does (public site)</h2>
-        <p>The site is your <strong>marketing and discovery</strong> presence: it showcases the hotel (rooms, dining, facilities, meetings &amp; events, tours, activities, updates, gallery), provides contact options, and directs guests to <strong>book</strong> and <strong>review</strong> through established channels (e.g. Booking.com, WhatsApp, TripAdvisor, Google). It works <strong>alongside</strong> your operations and OTAs — it does not replace a channel manager.</p>
-
-        <h3>Main public pages (paths on lucernakabgayihotel.com)</h3>
+        <h2>3. What guests can see and do</h2>
         <div class="table-responsive">
             <table class="table table-bordered align-middle bg-white">
                 <thead class="table-light">
                     <tr>
-                        <th scope="col">Area</th>
-                        <th scope="col">URL path</th>
-                        <th scope="col">Purpose</th>
+                        <th>Area</th>
+                        <th>Path</th>
+                        <th>What a guest can do</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td>Home</td>
                         <td><code>/</code></td>
-                        <td>First impression, slideshow, highlights.</td>
+                        <td>See the guest house and move to rooms, tours, or contact.</td>
                     </tr>
                     <tr>
-                        <td>About us</td>
-                        <td><code>/about-us</code></td>
-                        <td>Story and background content.</td>
+                        <td>Accommodation</td>
+                        <td><code>/our-rooms</code></td>
+                        <td>Read each room and start a stay request.</td>
                     </tr>
                     <tr>
-                        <td>Our services</td>
-                        <td><code>/our-services</code></td>
-                        <td>Services overview.</td>
-                    </tr>
-                    <tr>
-                        <td>Rooms &amp; apartments</td>
-                        <td><code>/our-rooms</code>, <code>/our-apartments</code>, <code>/our-rooms/{slug}</code></td>
-                        <td>Room types, detail pages, booking CTAs to external channels.</td>
-                    </tr>
-                    <tr>
-                        <td>Dining</td>
-                        <td><code>/dining</code></td>
-                        <td>Restaurant &amp; bar content.</td>
-                    </tr>
-                    <tr>
-                        <td>Facilities</td>
-                        <td><code>/facilities</code>, <code>/facilities/{slug}</code></td>
-                        <td>Hotel facilities and detail pages.</td>
-                    </tr>
-                    <tr>
-                        <td>Tours &amp; activities</td>
-                        <td><code>/tours</code>, <code>/tour/{slug}</code>, <code>/activities</code>, <code>/activities/{slug}</code></td>
-                        <td>Experiences and local activities.</td>
-                    </tr>
-                    <tr>
-                        <td>Meetings &amp; events</td>
-                        <td><code>/meetings-events</code>, <code>/meetings-events/{slug}</code></td>
-                        <td>Events overview and individual meeting spaces.</td>
-                    </tr>
-                    <tr>
-                        <td>SPA &amp; wellness</td>
-                        <td><code>/spa-wellness</code></td>
-                        <td>Wellness content (if enabled in navigation).</td>
-                    </tr>
-                    <tr>
-                        <td>Guesthouse / apartment landing</td>
-                        <td><code>/guesthouse</code>, <code>/apartment</code></td>
-                        <td>Targeted landing content where used.</td>
-                    </tr>
-                    <tr>
-                        <td>Promotions</td>
-                        <td><code>/promotions</code></td>
-                        <td>Offers or campaigns.</td>
-                    </tr>
-                    <tr>
-                        <td>Our updates (articles)</td>
-                        <td><code>/our-updates</code>, <code>/our-updates/{slug}</code></td>
-                        <td>News-style posts.</td>
-                    </tr>
-                    <tr>
-                        <td>Gallery</td>
-                        <td><code>/gallery</code></td>
-                        <td>Image gallery.</td>
-                    </tr>
-                    <tr>
-                        <td>Contact</td>
-                        <td><code>/contact</code></td>
-                        <td>Contact details and enquiry behaviour as configured.</td>
-                    </tr>
-                    <tr>
-                        <td>Book now</td>
+                        <td>Book a stay</td>
                         <td><code>/book-now</code></td>
-                        <td>Booking.com, WhatsApp, email — no on-site payment form.</td>
+                        <td>Send dates, guests, and contact details. The team confirms from the admin.</td>
                     </tr>
                     <tr>
-                        <td>Reviews</td>
-                        <td><code>/reviews</code></td>
-                        <td>Summary plus links to TripAdvisor, Google, Booking.com context — not an on-site review form.</td>
+                        <td>Tours &amp; Safaris</td>
+                        <td><code>/tours-and-safaris</code></td>
+                        <td>Read the four itineraries and open a tour.</td>
                     </tr>
                     <tr>
-                        <td>Terms &amp; conditions</td>
-                        <td><code>/terms-and-conditions</code></td>
-                        <td>Legal text, maintained from admin where applicable.</td>
+                        <td>Tour request</td>
+                        <td><code>/tours-and-safaris/{slug}</code></td>
+                        <td>Send accommodation preference, destinations, transport, dates, number of people, and the tours they want. The price is sent after review.</td>
+                    </tr>
+                    <tr>
+                        <td>Gallery, contact, updates</td>
+                        <td><code>/gallery</code>, <code>/contact</code>, <code>/our-updates</code></td>
+                        <td>Look at photos, write to the house, and read news.</td>
+                    </tr>
+                    <tr>
+                        <td>Manage a request</td>
+                        <td><code>/request/{token}</code></td>
+                        <td>Open the link from the email and update the same request.</td>
+                    </tr>
+                    <tr>
+                        <td>Cancel a request</td>
+                        <td><code>/request/{token}/cancel</code></td>
+                        <td>Give a reason, confirm a second time, and cancel before the start date.</td>
                     </tr>
                 </tbody>
             </table>
         </div>
-        <p class="small text-muted mb-0"><strong>Guest accounts:</strong> Travellers who register as guests use <code>/account</code> (dashboard, bookings, profile) after signing in — this is separate from staff content-management access.</p>
+        <p>French pages use the same paths with <code>/fr</code> in front. A guest who already sent a request in the past 7 days is asked either to submit a new one or to have the manage link emailed again. On a tour page, <strong>Submit via Email</strong> is shown when email delivery is configured, beside <strong>Submit via WhatsApp</strong>. WhatsApp opens in a new tab and includes the details they entered, using the phone number saved in Settings.</p>
 
-        <h2>3. Access &amp; sign-in</h2>
+        <h2>4. What the admin can do</h2>
+        <p>Sign in at <a href="{{ url('/login') }}">{{ url('/login') }}</a>. Super Admins and Content Managers land on the content dashboard. The left menu is the day-to-day tool.</p>
+        <ul>
+            <li class="mb-2"><strong>Reservations</strong> — read room requests and tour requests, including accommodation, transport, destinations, and the tours chosen.</li>
+            <li class="mb-2"><strong>Rooms and discounts</strong> — edit suites, prices, and offers.</li>
+            <li class="mb-2"><strong>Tours &amp; Safaris</strong> — edit the text, the cover, and the image gallery for each trip.</li>
+            <li class="mb-2"><strong>Gallery, slideshow, and page backgrounds</strong> — photos for the public site.</li>
+            <li class="mb-2"><strong>Settings</strong> — contact email, phone (this number is the WhatsApp link), logo, and about text.</li>
+            <li class="mb-2"><strong>Users</strong> — Super Admin only. Add or remove people who can sign in.</li>
+            <li class="mb-2"><strong>Hosting</strong> — the annual payment request, in dollars and francs, with download of the current and past invoices. A Super Admin marks an invoice paid and can send a reminder. The exchange rate is changed only by admin@iremetech.com.</li>
+            <li class="mb-0"><strong>Handover guide</strong> — opens this page.</li>
+        </ul>
 
-        <h3>3.1 Roles</h3>
-        <p>Editing website content requires an account with the <strong>Super Admin</strong> or <strong>Content Manager</strong> role (or equivalent approved for your project). Public self-registration does <strong>not</strong> grant access to the content-management screens.</p>
+        <h2>5. How it is secured</h2>
+        <ul>
+            <li class="mb-2">The admin area asks for a signed-in Super Admin or Content Manager. A Content Manager does not manage user accounts.</li>
+            <li class="mb-2">Passwords are stored hashed. Admin forms use a CSRF token.</li>
+            <li class="mb-2">A guest manages or cancels a request with a long random link from their email. The link is not a public account number.</li>
+            <li class="mb-2">Cancellation asks for a reason and a second confirmation. It closes on the start date, after check-in, and after the request is already cancelled.</li>
+            <li class="mb-2">Email addresses are checked for a valid format and a mail server before a request is accepted.</li>
+            <li class="mb-2">The same email address is stopped from quietly creating another room or tour request within 7 days.</li>
+            <li class="mb-2">Team and guest mail goes out through Resend when the API key is set.</li>
+            <li class="mb-0">This handover page is kept out of search results. Share the link with the team: <a href="{{ url('/handover') }}">{{ url('/handover') }}</a>.</li>
+        </ul>
 
-        <h3>3.2 Requesting access</h3>
+        <h2>6. Admin user guide</h2>
+
+        <h3>Sign in</h3>
         <ol>
-            <li class="mb-2">Coordinate with <strong>KURRE Consultancy</strong> through the <strong>same communication channel used during this project</strong>, and provide the <strong>name and email</strong> of each person who should manage the site.</li>
-            <li class="mb-2">That person may register a basic account at <a href="https://lucernakabgayihotel.com/register" target="_blank" rel="noopener noreferrer">https://lucernakabgayihotel.com/register</a> (or start from <a href="https://lucernakabgayihotel.com/login" target="_blank" rel="noopener noreferrer">https://lucernakabgayihotel.com/login</a> and use Register). Use the email that should receive admin access.</li>
-            <li class="mb-2"><strong>KURRE Consultancy</strong> (or your Super Admin) assigns the correct role. Until then, content-management areas will not be available.</li>
+            <li class="mb-2">Open <a href="{{ url('/login') }}">{{ url('/login') }}</a>.</li>
+            <li class="mb-2">Use the email and password for your Super Admin or Content Manager account.</li>
+            <li class="mb-0">You arrive on the content dashboard. Use the left menu from there.</li>
         </ol>
 
-        <h3>3.3 Where to sign in (single login for staff)</h3>
-        <p>Staff use <strong>one</strong> login URL for the whole application:</p>
+        <h3>Update a room</h3>
+        <ol>
+            <li class="mb-2">Open <strong>Rooms</strong>.</li>
+            <li class="mb-2">Edit the name, description, price, and photos, then save.</li>
+            <li class="mb-0">Open the public Accommodation page and confirm the room reads the way you expect.</li>
+        </ol>
+
+        <h3>Update a tour and its gallery</h3>
+        <ol>
+            <li class="mb-2">Open <strong>Tours &amp; Safaris</strong>.</li>
+            <li class="mb-2">Edit the summary, duration, and itinerary. Add or replace gallery images for that tour.</li>
+            <li class="mb-0">The public address stays <code>/tours-and-safaris/{slug}</code>. Saving a gallery does not change that address.</li>
+        </ol>
+
+        <h3>Read a guest request</h3>
+        <ol>
+            <li class="mb-2">Open <strong>Reservations</strong>.</li>
+            <li class="mb-2">A room request shows the dates and the quoted stay. A tour request shows the tours, accommodation, transport, and destinations, and the price is filled in after you review it.</li>
+            <li class="mb-0">Reply from the reservation when you are ready. The guest already has a manage link in the email they received.</li>
+        </ol>
+
+        <h3>WhatsApp and email on tour requests</h3>
+        <p>Put the house phone, including the country code, in <strong>Settings</strong>. Guests who choose WhatsApp open a chat to that number with their form answers filled in. Guests who choose email receive a copy, and the team receives one too, when the Resend key is set.</p>
+
+        <div class="callout-training mb-4">
+            <p class="mb-2"><strong>If several people will update the site</strong></p>
+            <p class="mb-0 small">Ask a Super Admin to create each person as a Content Manager. Walk through Rooms, Tours &amp; Safaris, Reservations, and Hosting once together so everyone can find a request and the hosting invoice.</p>
+        </div>
+
+        <h2>7. Annual hosting renewal</h2>
+        <p>Hosting is billed once a year. On <strong>1 October</strong> the admin creates an invoice for <strong>1 October through 30 September</strong> of the following year. Open it from <strong>Hosting</strong> in the admin menu.</p>
+        <p>Each invoice lists four services:</p>
         <ul>
-            <li class="mb-2"><strong>Sign in:</strong> <a href="https://lucernakabgayihotel.com/login" target="_blank" rel="noopener noreferrer">https://lucernakabgayihotel.com/login</a></li>
+            <li class="mb-2"><strong>Domain registration</strong> — included at $0.00 unless a super admin sets a cost for a later invoice.</li>
+            <li class="mb-2"><strong>Hosting</strong> — $80.00 per year.</li>
+            <li class="mb-2"><strong>SSL</strong> — included at $0.00 unless a super admin sets a cost for a later invoice.</li>
+            <li class="mb-0"><strong>Support</strong> — included at $0.00. A super admin can add a support cost later, and that cost is used on the next invoice.</li>
         </ul>
-        <p>After a successful login, <strong>Super Admins</strong> and <strong>Content Managers</strong> are taken to the <strong>content-management dashboard</strong>:</p>
+        <p>Each invoice shows the amount in US dollars and in Rwandan francs. The rate starts at <strong>1 USD = 1,530 RWF</strong>. Only the Ireme super admin signed in as <strong>admin@iremetech.com</strong> can change that rate. A change applies to the next invoice. Invoices already issued keep the rate printed on them.</p>
+        <p>The current year, <strong>1 October 2026 to 30 September 2027</strong>, is invoice <strong>IREME/gmasters/PH001/2026</strong> and is already marked <strong>Paid</strong>. Later invoices are created unpaid. A super admin marks one paid after the transfer is received, and can send a payment reminder by hand if payment is delayed. Every admin can open Hosting and view or download the current invoice and every past invoice.</p>
+        <p>The team is emailed, and a notice stays on the dashboard, at these moments:</p>
         <ul>
-            <li class="mb-0"><a href="https://lucernakabgayihotel.com/content-management/dashboard" target="_blank" rel="noopener noreferrer">https://lucernakabgayihotel.com/content-management/dashboard</a></li>
+            <li class="mb-2">30 days before the hosting year ends</li>
+            <li class="mb-2">2 days before it ends</li>
+            <li class="mb-2">on the day it ends</li>
+            <li class="mb-0">after it has expired, until the new invoice is marked paid</li>
         </ul>
-        <p class="small text-muted mt-2 mb-0">Do not rely on any other “admin login” URL — your workflow is <strong>/login</strong> → dashboard and sidebar as described below.</p>
+        <p>Each email is sent once for that stage. The notice on the dashboard remains so someone can still act if they missed the email. Pay with either method below. The same details are printed on the invoice.</p>
+        <div class="row g-3 mb-3">
+            <div class="col-md-6">
+                <div class="border rounded p-3 h-100 bg-white">
+                    <strong>Bank Transfer</strong>
+                    <div>Account No: 4491274576</div>
+                    <div>Bank: BPR</div>
+                    <div>Names: Ireme Technologies</div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="border rounded p-3 h-100 bg-white">
+                    <strong>MoMo Pay</strong>
+                    <div>20033</div>
+                    <div>Ireme Technologies</div>
+                </div>
+            </div>
+        </div>
+        <p class="mb-0">Changing domain, SSL, or support amounts applies to the next 1 October invoice. The invoice already issued keeps the amounts printed on it.</p>
 
-        <h2>4. Managing content — content-management &amp; related tools</h2>
-        <p>Day-to-day editing is centred on <strong>Content management</strong> (sidebar after you open the dashboard). Some tools open related screens (e.g. Settings, dining, meetings) that use the same staff login.</p>
-
-        <h3>4.1 Sidebar (typical items)</h3>
-        <p>From <code>/content-management/dashboard</code>, the left menu commonly includes:</p>
-        <ul>
-            <li class="mb-1"><strong>Dashboard</strong> — overview and quick actions.</li>
-            <li class="mb-1"><strong>Reservations</strong> — view/reply to reservation-related items where used.</li>
-            <li class="mb-1"><strong>Rooms</strong> — room types, photos, prices, status.</li>
-            <li class="mb-1"><strong>Facilities</strong> — facility pages and images.</li>
-            <li class="mb-1"><strong>Dining page</strong> — restaurant / bar content (opens the dining editor).</li>
-            <li class="mb-1"><strong>Meetings</strong> — meetings &amp; events / meeting-room content (opens the meetings editor).</li>
-            <li class="mb-1"><strong>Amenities</strong> — amenity lists used across the site.</li>
-            <li class="mb-1"><strong>Activities</strong> — tour &amp; activity content.</li>
-            <li class="mb-1"><strong>Attractions</strong> — nearby points of interest.</li>
-            <li class="mb-1"><strong>Gallery</strong> — gallery images.</li>
-            <li class="mb-1"><strong>Slideshow</strong> — home (and related) carousel slides.</li>
-            <li class="mb-1"><strong>Page heroes</strong> — hero banners for major sections.</li>
-            <li class="mb-1"><strong>System Users</strong> — <em>Super Admin only</em> — user accounts.</li>
-            <li class="mb-1"><strong>Settings</strong> — opens the full settings area (logo, contacts, booking &amp; review links, about text, keywords, etc.).</li>
-        </ul>
-        <p>The dashboard also offers <strong>quick actions</strong> (e.g. rooms, services, facilities, amenities). <strong>Services</strong> live under <code>/content-management/services</code> even if not every item appears in the short sidebar list.</p>
-        <p>Additional CMS screens reachable when logged in include (paths under <code>/content-management/</code>): <strong>About</strong> (<code>…/about</code>), <strong>Contacts</strong> (<code>…/contacts</code>), <strong>Terms &amp; conditions</strong> (<code>…/terms-conditions</code>), and <strong>SEO data</strong> (<code>…/seo-data</code>) — use these for structured page content and SEO where your role allows.</p>
-
-        <h3>4.2 Settings (critical)</h3>
-        <p>Open <strong>Settings</strong> from the sidebar — this loads the settings area (e.g. <code>https://lucernakabgayihotel.com/setting</code>). Tabs include:</p>
-        <ul>
-            <li class="mb-2"><strong>Contacts &amp; logo</strong> — company name, logo, phones, email, address, map embed, social links, footer “delivered by” line (where enabled).</li>
-            <li class="mb-2"><strong>Booking &amp; review links</strong> — Booking.com URL, TripAdvisor and Google links, WhatsApp, contact email for CTAs, optional <strong>display scores / review counts</strong> for the Reviews page.</li>
-            <li class="mb-2"><strong>About Hotel</strong> — long-form story and images.</li>
-            <li class="mb-2"><strong>Header keywords</strong> — SEO keywords where used in the layout.</li>
-        </ul>
-        <p>Always save and verify on the public site (preferably in a private/incognito window).</p>
-
-        <h3>4.3 Updates (articles) &amp; messages (legacy admin screens)</h3>
-        <p>Depending on your workflow, article-style <strong>Our updates</strong> posts may still be maintained from the legacy blog list (e.g. <code>https://lucernakabgayihotel.com/getBlogs</code> when logged in with the same staff account). Contact-form <strong>enquiries</strong> may appear under <code>https://lucernakabgayihotel.com/getMessages</code> (or equivalent) for staff who handle messages. If you cannot see an item, confirm your role with KURRE Consultancy.</p>
-
-        <h3>4.4 Tips</h3>
-        <ul>
-            <li class="mb-2">Keep <strong>Booking.com</strong> and <strong>review</strong> URLs in Settings accurate — they power primary Book and Reviews behaviour.</li>
-            <li class="mb-2">Optimise large images before upload where possible.</li>
-            <li class="mb-0">If changes do not show, try an incognito/private window to avoid cache.</li>
-        </ul>
-
-        <h2>5. Why external booking and review links</h2>
-        <p>The site points guests to <strong>Booking.com</strong>, <strong>WhatsApp</strong>, <strong>email</strong>, <strong>TripAdvisor</strong>, and <strong>Google</strong> rather than hosting full booking or anonymous on-site reviews. That matches how travellers book and trust feedback, and avoids fake/spam review boxes.</p>
-        <ul>
-            <li class="mb-2"><strong>Booking:</strong> OTAs handle availability, confirmations, and payments in systems guests already trust.</li>
-            <li class="mb-2"><strong>Reviews:</strong> Established platforms improve credibility and discovery.</li>
-            <li class="mb-0"><strong>Your site:</strong> Presents the brand, answers via phone/WhatsApp/email, and sends ready guests to the right place to book and review.</li>
-        </ul>
-
-        <h2>6. Thank you</h2>
-        <p>We are grateful to <strong>Lucerna Kabgayi Hotel</strong> for trusting <strong>KURRE Consultancy</strong> with this project. We hope this website serves you and your guests well. If you need adjustments or a walkthrough, reach out through the <strong>same project channel used with KURRE Consultancy</strong> — including optional training if needed.</p>
-
-        <hr class="my-4">
-        <p class="small text-muted mb-0">This document is part of your project handover. Save or print it from your browser for your internal records.</p>
+        <h2>8. Keeping reminders running</h2>
+        <p>The renewal check runs when an admin opens the dashboard, and it also runs on a daily schedule at 08:00 Kigali time. On the server, run the scheduler every minute:</p>
+        <p><code>* * * * * php /path/to/artisan schedule:run</code></p>
+        <p class="mb-0">That schedule issues the 1 October invoice and sends the 30-day, 2-day, expiry-day, and expired emails. Opening the admin still does the same check, so a reminder is not lost when someone signs in on that day.</p>
     </div>
 </div>
 </div>

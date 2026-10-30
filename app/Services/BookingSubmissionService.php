@@ -93,6 +93,16 @@ class BookingSubmissionService
         $booking->manage_token = app(GuestRequestService::class)->makeToken();
         $booking->save();
 
+        if ($request->input('submit_via') === 'whatsapp') {
+            $booking->load(['room', 'facility', 'tourActivity']);
+
+            return [
+                'booking' => $booking,
+                'admin_sent' => false,
+                'guest_sent' => false,
+            ];
+        }
+
         return $this->deliver($booking);
     }
 

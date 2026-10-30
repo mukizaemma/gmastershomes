@@ -14,7 +14,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="description" content="@yield('meta_description', site_meta_description($setting))">
     <meta name="keywords" content="{{$setting?->keywords ?? ''}}">
-    <meta name="robots" content="@yield('meta_robots', 'index, follow')">
+    <meta name="robots" content="{{ request()->is('handover', 'fr/handover') ? 'noindex, nofollow' : trim($__env->yieldContent('meta_robots', 'index, follow')) }}">
     <link rel="canonical" href="@yield('canonical_url', url()->current())">
     <link rel="dns-prefetch" href="https://fonts.googleapis.com">
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">

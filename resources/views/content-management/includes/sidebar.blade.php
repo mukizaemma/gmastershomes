@@ -57,7 +57,7 @@ $isDiningAdmin = $currentRoute === 'resto' || str_contains(strtolower((string) $
                 <i class="fas fa-list me-2"></i>Amenities
             </a>
             <a href="{{ route('content-management.tour-activities') }}" class="nav-item nav-link {{ str_contains($currentRoute, 'content-management.tour-activities') ? 'active' : '' }}">
-                <i class="fas fa-hiking me-2"></i>Activities
+                <i class="fas fa-hiking me-2"></i>Tours &amp; Safaris
             </a>
             <a href="{{ route('content-management.why-choose-us.index') }}" class="nav-item nav-link {{ str_contains($currentRoute, 'content-management.why-choose-us') ? 'active' : '' }}">
                 <i class="fas fa-thumbs-up me-2"></i>Why Choose Us
@@ -81,6 +81,17 @@ $isDiningAdmin = $currentRoute === 'resto' || str_contains(strtolower((string) $
             </a>
             <a href="{{ route('content-management.page-heroes') }}" class="nav-item nav-link {{ str_contains($currentRoute, 'content-management.page-heroes') ? 'active' : '' }}">
                 <i class="fas fa-image me-2"></i>Page backgrounds
+            </a>
+
+            <a href="{{ route('content-management.hosting.index') }}" class="nav-item nav-link {{ str_starts_with((string) $currentRoute, 'content-management.hosting') ? 'active' : '' }}">
+                <i class="fas fa-file-invoice-dollar me-2"></i>Hosting
+                @php $hostingAlert = hosting_alert(); @endphp
+                @if(! empty($hostingAlert))
+                    <span class="badge bg-{{ $hostingAlert['level'] === 'danger' ? 'danger' : 'warning' }} ms-1">{{ $hostingAlert['level'] === 'danger' ? 'Due' : 'Soon' }}</span>
+                @endif
+            </a>
+            <a href="{{ route('handover') }}" class="nav-item nav-link" target="_blank" rel="noopener noreferrer">
+                <i class="fas fa-book me-2"></i>Handover guide
             </a>
 
             <hr>

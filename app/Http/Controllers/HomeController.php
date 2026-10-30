@@ -213,10 +213,24 @@ class HomeController extends Controller
         try {
             $result = $bookingSubmission->submitTour($request);
         } catch (RecentRequestExists $e) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'ok' => false,
+                    'duplicate' => true,
+                ], 409);
+            }
+
             return redirect()->back()
                 ->withInput()
                 ->with('recent_request', $e->payload())
                 ->withFragment('activity-enquiry');
+        }
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'ok' => true,
+                'id' => $result['booking']->id,
+            ]);
         }
 
         return $this->redirectBackWithContactEmailSwal(

@@ -10,8 +10,8 @@ return [
         'path' => '/our-rooms',
     ],
     'activities' => [
-        'label' => 'Experiences',
-        'path' => '/activities',
+        'label' => 'Tours & Safaris',
+        'path' => '/tours-and-safaris',
     ],
     'dining' => [
         'label' => 'Coffee Shop',

@@ -106,6 +106,11 @@ class User extends Authenticatable
         return $this->role_id == 1 || ($this->role && $this->role->slug === 'super-admin');
     }
 
+    public function canEditHostingRate(): bool
+    {
+        return strtolower((string) $this->email) === strtolower((string) config('hosting.rate_editor_email', 'admin@iremetech.com'));
+    }
+
     public function isContentManager(){
         return $this->role_id == 2 || ($this->role && $this->role->slug === 'admin');
     }
