@@ -79,7 +79,7 @@ class HotelSettingSeeder extends Seeder
             'founderDescription' => '<p>GMasters Homes is a quiet guest house in Kabeza, Kigali. It is a house, not a hotel: nine rooms, two guests in each, and a garden.</p><p>Four bedrooms in the main building share an equipped kitchen, with breakfast included. Four studios have a fridge, a television and their own kitchen. A short studio stay includes breakfast. On a longer studio stay, guests can prepare their own meals, with water, electricity, internet and cleaning included. One private bedroom stands apart, with breakfast, hot water and Wi-Fi.</p>',
             'mission' => 'A calm, direct stay in Kigali — easy to book, easy to arrive, and comfortable whether you are here for a night or for weeks.',
             'vision' => 'Guests who would rather come home to a garden than walk through a hotel lobby.',
-            'storyDescription' => '<p>The airport is five minutes by car and about twenty-four minutes on foot. The Kigali Genocide Memorial in Gisozi is about twenty minutes by car. Kabeza market, a supermarket and food are nearby, and the house itself stays quiet.</p><p>Explore Rwanda — city days, lakes, parks and the volcanoes — can be arranged from the same website, around your dates and your group.</p>',
+            'storyDescription' => '<p>The airport is five minutes by car and about twenty-four minutes on foot. The Kigali Genocide Memorial in Gisozi is about twenty minutes by car. Kabeza market, a supermarket and food are nearby, and the house itself stays quiet.</p><p>Tours in Rwanda and Uganda — gorillas, chimpanzees, parks and volcanoes — can be arranged from the same website. The price is sent after the dates, the group and the preferences are shared.</p>',
             'user_id' => $superAdmin?->id,
             'updated_at' => now(),
         ];
@@ -89,6 +89,9 @@ class HotelSettingSeeder extends Seeder
             $plain = strtolower(strip_tags((string) $current->founderDescription));
             if ($plain === '' || str_contains($plain, 'skojet') || str_contains($plain, 'kinigi') || str_contains($plain, 'hotel')) {
                 $current->fill($about);
+                $current->save();
+            } elseif (str_contains((string) $current->storyDescription, 'Explore Rwanda')) {
+                $current->storyDescription = $about['storyDescription'];
                 $current->save();
             }
         } else {

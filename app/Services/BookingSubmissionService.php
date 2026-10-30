@@ -2,11 +2,13 @@
 
 namespace App\Services;
 
+use App\Exceptions\RecentRequestExists;
 use App\Mail\BookingSubmittedAdminMail;
 use App\Mail\BookingSubmittedGuestMail;
 use App\Models\Booking;
 use App\Models\Room;
 use App\Models\Setting;
+use App\Models\TourActivity;
 use App\Rules\ActiveEmail;
 use Illuminate\Http\Request;
 
@@ -17,7 +19,85 @@ class BookingSubmissionService
      */
     public function submit(Request $request): array
     {
-        $booking = $this->createBooking($request);
+        return $this->deliver($this->createBooking($request));
+    }
+
+    /**
+     * @return array{booking: Booking, admin_sent: bool, guest_sent: bool}
+     */
+    public function submitTour(Request $request): array
+    {
+        $validated = $request->validate([
+            'names' => 'required|string|max:255',
+            'email' => ['required', 'email', 'max:255', new ActiveEmail],
+            'phone' => 'required|string|max:60',
+            'activity_id' => 'nullable|integer|exists:tour_activities,id',
+            'activity_start' => 'required|date|after_or_equal:today',
+            'activity_end' => 'required|date|after_or_equal:activity_start',
+            'activity_ids' => 'required|array|min:1|max:20',
+            'activity_ids.*' => 'integer|exists:tour_activities,id',
+            'guests' => 'required|integer|min:1|max:40',
+            'accommodation_preference' => 'required|string|max:255',
+            'transport_preference' => 'required|string|max:255',
+            'destinations' => 'required|string|max:2000',
+            'notes' => 'nullable|string|max:5000',
+        ]);
+
+        $this->guardRecent($request);
+
+        $activities = TourActivity::query()
+            ->whereIn('id', $validated['activity_ids'])
+            ->ordered()
+            ->get(['id', 'title']);
+
+        $primaryId = filled($validated['activity_id'] ?? null)
+            ? (int) $validated['activity_id']
+            : (int) $activities->first()?->id;
+
+        $booking = new Booking();
+        $booking->names = $validated['names'];
+        $booking->email = $validated['email'];
+        $booking->phone = $validated['phone'];
+        $booking->message = $validated['notes'] ?? null;
+        $booking->checkin_date = $validated['activity_start'];
+        $booking->checkout_date = $validated['activity_end'];
+        $booking->adults = (int) $validated['guests'];
+        $booking->children = 0;
+        $booking->rooms = 1;
+        $booking->party_type = (int) $validated['guests'] > 2 ? 'group' : 'individual';
+        $booking->status = 'pending';
+        $booking->booking_type = 'online';
+        $booking->reservation_channel = 'website';
+        $booking->guest_source = 'unspecified';
+        $booking->payment_status = 'pending';
+        $booking->paid_amount = 0;
+        $booking->total_amount = 0;
+        $booking->balance_amount = 0;
+        $booking->reservation_type = 'tour_activity';
+        $booking->tour_activity_id = $primaryId ?: null;
+        $booking->room_id = null;
+        $booking->facility_id = null;
+        $booking->accommodation_preference = $validated['accommodation_preference'];
+        $booking->transport_preference = $validated['transport_preference'];
+        $booking->destinations = $validated['destinations'];
+        $booking->selected_tours = $activities->map(fn (TourActivity $activity) => [
+            'id' => $activity->id,
+            'title' => $activity->title,
+        ])->values()->all();
+        if (\Illuminate\Support\Facades\Schema::hasColumn('bookings', 'currency')) {
+            $booking->currency = hotel_currency();
+        }
+        if (auth()->check()) {
+            $booking->user_id = auth()->id();
+        }
+        $booking->manage_token = app(GuestRequestService::class)->makeToken();
+        $booking->save();
+
+        return $this->deliver($booking);
+    }
+
+    private function deliver(Booking $booking): array
+    {
         $booking->load(['room', 'facility', 'tourActivity']);
 
         $adminSent = SiteNotificationMail::sendToTeam(new BookingSubmittedAdminMail($booking));
@@ -28,6 +108,18 @@ class BookingSubmissionService
             'admin_sent' => $adminSent,
             'guest_sent' => $guestSent,
         ];
+    }
+
+    private function guardRecent(Request $request): void
+    {
+        if ($request->boolean('confirm_new_request')) {
+            return;
+        }
+
+        $recent = app(GuestRequestService::class)->recentForEmail((string) $request->input('email'));
+        if ($recent) {
+            throw new RecentRequestExists($recent);
+        }
     }
 
     public function createBooking(Request $request): Booking
@@ -65,6 +157,10 @@ class BookingSubmissionService
         }
 
         $request->validate($rules);
+
+        if (! $isFacility) {
+            $this->guardRecent($request);
+        }
 
         $booking = new Booking();
         $booking->names = $request->input('names');
@@ -107,12 +203,17 @@ class BookingSubmissionService
         }
 
         if ($isTourActivity) {
+            $activity = TourActivity::query()->find($request->input('tour_activity_id'));
             $booking->tour_activity_id = $request->input('tour_activity_id');
             $booking->reservation_type = 'tour_activity';
             $booking->room_id = null;
             $booking->facility_id = null;
             $booking->total_amount = 0;
             $booking->balance_amount = 0;
+            $booking->selected_tours = $activity ? [[
+                'id' => $activity->id,
+                'title' => $activity->title,
+            ]] : [];
         } elseif ($isFacility) {
             $booking->facility_id = $request->input('facility_id');
             $booking->reservation_type = 'facility';
@@ -164,6 +265,10 @@ class BookingSubmissionService
             $booking->balance_amount = $booking->total_amount;
         }
 
+        if (in_array($booking->reservation_type, ['room', 'tour_activity'], true)) {
+            $booking->manage_token = app(GuestRequestService::class)->makeToken();
+        }
+
         $booking->save();
 
         return $booking;
@@ -181,7 +286,7 @@ class BookingSubmissionService
     {
         $typeLabel = match ($booking->reservation_type ?? 'room') {
             'facility' => 'Facility booking',
-            'tour_activity' => 'Activity booking',
+            'tour_activity' => 'Tour request',
             default => 'Room booking',
         };
 

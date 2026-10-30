@@ -22,6 +22,8 @@ class TourActivityController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
+            'summary' => 'nullable|string|max:500',
+            'duration_label' => 'nullable|string|max:80',
             'cover_image' => admin_image_validation_rule(),
             'status' => 'required|in:Active,Inactive',
             'sort_order' => 'nullable|integer|min:0|max:9999',
@@ -30,8 +32,17 @@ class TourActivityController extends Controller
 
         $activity = new TourActivity();
         $activity->title = $request->title;
-        $activity->slug = Str::slug($request->title);
+        $baseSlug = Str::slug($request->title);
+        $slug = $baseSlug !== '' ? $baseSlug : 'tour';
+        $suffix = 2;
+        while (TourActivity::query()->where('slug', $slug)->exists()) {
+            $slug = $baseSlug.'-'.$suffix;
+            $suffix++;
+        }
+        $activity->slug = $slug;
         $activity->description = $request->description;
+        $activity->summary = $request->summary;
+        $activity->duration_label = $request->duration_label;
         $activity->status = $request->status;
         $activity->sort_order = (int) ($request->sort_order ?? 0);
         $activity->added_by = auth()->id();
@@ -60,6 +71,8 @@ class TourActivityController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
+            'summary' => 'nullable|string|max:500',
+            'duration_label' => 'nullable|string|max:80',
             'cover_image' => admin_image_validation_rule(),
             'status' => 'required|in:Active,Inactive',
             'sort_order' => 'nullable|integer|min:0|max:9999',
@@ -68,8 +81,9 @@ class TourActivityController extends Controller
 
         $activity = TourActivity::findOrFail($id);
         $activity->title = $request->title;
-        $activity->slug = Str::slug($request->title);
         $activity->description = $request->description;
+        $activity->summary = $request->summary;
+        $activity->duration_label = $request->duration_label;
         $activity->status = $request->status;
         $activity->sort_order = (int) ($request->sort_order ?? 0);
 

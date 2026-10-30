@@ -2,11 +2,14 @@
 
 namespace App\Livewire\Public;
 
+use App\Exceptions\RecentRequestExists;
+use App\Models\Booking;
 use App\Models\Room;
 use App\Models\RoomDiscount;
 use App\Models\Setting;
 use App\Rules\ActiveEmail;
 use App\Services\BookingSubmissionService;
+use App\Services\GuestRequestService;
 use App\Services\RoomAvailabilityService;
 use App\Services\RoomDiscountService;
 use App\Support\BookingStayReasons;
@@ -85,6 +88,24 @@ class BookNowPage extends Component
 
     /** @var bool */
     public $submitted = false;
+
+    /** @var bool */
+    public $duplicatePrompt = false;
+
+    /** @var int|null */
+    public $duplicateBookingId = null;
+
+    /** @var string */
+    public $duplicateCreatedOn = '';
+
+    /** @var string */
+    public $duplicateKind = 'room';
+
+    /** @var bool */
+    public $confirmNewRequest = false;
+
+    /** @var bool */
+    public $duplicateLinkSent = false;
 
     /** @var int|null */
     public $submittedBookingId = null;
@@ -360,6 +381,28 @@ class BookNowPage extends Component
         $this->confirmBooking($bookings);
     }
 
+    public function submitAsNewRequest(BookingSubmissionService $bookings): void
+    {
+        $this->confirmNewRequest = true;
+        $this->confirmBooking($bookings);
+    }
+
+    public function emailRecentLink(GuestRequestService $requests): void
+    {
+        $booking = Booking::query()->find($this->duplicateBookingId);
+        $email = strtolower(trim((string) $this->email));
+        if (! $booking || strtolower((string) $booking->email) !== $email) {
+            $this->addError('email', site_trans('booking.recent_link_failed'));
+
+            return;
+        }
+
+        $this->duplicateLinkSent = $requests->sendAccessLink($booking);
+        if (! $this->duplicateLinkSent) {
+            $this->addError('email', site_trans('booking.recent_link_failed'));
+        }
+    }
+
     public function confirmBooking(BookingSubmissionService $bookings): void
     {
         $this->validateStay();
@@ -400,9 +443,21 @@ class BookNowPage extends Component
                 'board' => $this->board,
                 'occupancy' => $this->occupancy,
                 'message' => implode("\n", $notes),
+                'confirm_new_request' => $this->confirmNewRequest ? 1 : 0,
             ]);
 
-            $result = $bookings->submit($request);
+            try {
+                $result = $bookings->submit($request);
+            } catch (RecentRequestExists $e) {
+                $payload = $e->payload();
+                $this->duplicatePrompt = true;
+                $this->duplicateBookingId = $payload['id'];
+                $this->duplicateCreatedOn = $payload['created_on'];
+                $this->duplicateKind = $payload['kind'];
+                $this->duplicateLinkSent = false;
+
+                return;
+            }
             $this->submittedBookingId = $result['booking']->id;
             $this->guestEmailSent = (bool) ($result['guest_sent'] ?? false);
             $this->submitted = true;

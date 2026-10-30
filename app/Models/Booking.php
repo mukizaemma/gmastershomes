@@ -50,6 +50,12 @@ class Booking extends Model
         'others',
         'rooms',
         'message',
+        'manage_token',
+        'accommodation_preference',
+        'transport_preference',
+        'destinations',
+        'selected_tours',
+        'cancellation_reason',
         'admin_reply',
         'admin_replied_at',
         'status',
@@ -89,6 +95,7 @@ class Booking extends Model
         'charges_amount' => 'float',
         'waived_amount' => 'float',
         'admin_replied_at' => 'datetime',
+        'selected_tours' => 'array',
         'checked_in_at' => 'datetime',
         'checked_out_at' => 'datetime',
     ];
@@ -184,6 +191,24 @@ class Booking extends Model
 
     public function tourActivity(){
         return $this->belongsTo(\App\Models\TourActivity::class, 'tour_activity_id');
+    }
+
+    public function selectedTourTitles(): string
+    {
+        $items = is_array($this->selected_tours) ? $this->selected_tours : [];
+        $titles = [];
+        foreach ($items as $item) {
+            $title = is_array($item) ? trim((string) ($item['title'] ?? '')) : trim((string) $item);
+            if ($title !== '') {
+                $titles[] = $title;
+            }
+        }
+
+        if ($titles !== []) {
+            return implode(', ', $titles);
+        }
+
+        return (string) ($this->tourActivity->title ?? '');
     }
 
     public function assignedRoom(){

@@ -521,6 +521,17 @@ $registerPublicSiteRoutes = function (bool $nameRoutes = true): void {
     $named(Route::get('/book-now', BookNowPage::class), 'connect');
     $named(Route::post('/enquiry', [App\Http\Controllers\HomeController::class, 'sendMessage']), 'enquiry.submit');
     $named(Route::post('/booking', [App\Http\Controllers\HomeController::class, 'storeBooking']), 'booking.submit');
+    $named(Route::post('/tour-request', [App\Http\Controllers\HomeController::class, 'submitTourRequest']), 'tour-request.submit');
+    $named(
+        Route::post('/request/access-link', [App\Http\Controllers\GuestRequestController::class, 'sendAccessLink'])->middleware('throttle:6,1'),
+        'guest-request.access-link'
+    );
+    $named(Route::get('/request/{token}', [App\Http\Controllers\GuestRequestController::class, 'show'])->where('token', '[A-Za-z0-9]{32,80}'), 'guest-request.manage');
+    $named(Route::post('/request/{token}', [App\Http\Controllers\GuestRequestController::class, 'update'])->where('token', '[A-Za-z0-9]{32,80}'), 'guest-request.update');
+    $named(Route::get('/request/{token}/cancel', [App\Http\Controllers\GuestRequestController::class, 'cancel'])->where('token', '[A-Za-z0-9]{32,80}'), 'guest-request.cancel');
+    $named(Route::post('/request/{token}/cancel', [App\Http\Controllers\GuestRequestController::class, 'reviewCancel'])->where('token', '[A-Za-z0-9]{32,80}'), 'guest-request.cancel-review');
+    $named(Route::get('/request/{token}/cancel/confirm', [App\Http\Controllers\GuestRequestController::class, 'confirmCancel'])->where('token', '[A-Za-z0-9]{32,80}'), 'guest-request.cancel-confirm');
+    $named(Route::post('/request/{token}/cancel/confirm', [App\Http\Controllers\GuestRequestController::class, 'storeCancel'])->where('token', '[A-Za-z0-9]{32,80}'), 'guest-request.cancel-store');
 };
 
 Route::middleware('set.locale')->group(function () use ($registerPublicSiteRoutes) {

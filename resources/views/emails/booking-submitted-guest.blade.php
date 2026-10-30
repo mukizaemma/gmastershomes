@@ -16,6 +16,8 @@
     <p style="margin: 0 0 24px; white-space: pre-wrap;">{{ $booking->message }}</p>
     @endif
 
+    @include('emails.partials.guest-request-actions', ['booking' => $booking])
+
     <p style="font-size: 14px; color: #666;">If you need to reach us sooner, reply to this email or call the hotel.</p>
 </body>
 </html>

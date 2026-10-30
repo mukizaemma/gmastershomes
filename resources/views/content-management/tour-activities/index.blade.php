@@ -9,7 +9,7 @@
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
                     <h4 class="mb-0">Tour Activities</h4>
-                    <p class="text-muted small mb-0">Homepage shows the first 3 active activities by display order. Manage cover image, description, and gallery photos here.</p>
+                    <p class="text-muted small mb-0">Each tour has a cover image and its own gallery. The public page does not show a price — that is sent after a tour request.</p>
                 </div>
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#activityModal" onclick="resetForm()">
                     <i class="fa fa-plus me-2"></i>Add New Tour Activity
@@ -80,7 +80,16 @@
                     <div class="mb-3">
                         <label class="form-label">Description</label>
                         <textarea class="form-control" id="activity_description" name="description" rows="6"></textarea>
-                        <small class="text-muted">A short excerpt appears on the homepage; the full text on the activity detail page.</small>
+                        <small class="text-muted">Shown in full on the tour page. Use headings for each day, then Included and Not included.</small>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Card summary</label>
+                        <textarea class="form-control" id="activity_summary" name="summary" rows="3" maxlength="500"></textarea>
+                        <small class="text-muted">Short text on the tours list. Do not put a price here — the price is sent after a request.</small>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Duration</label>
+                        <input type="text" class="form-control" id="activity_duration" name="duration_label" maxlength="80" placeholder="7 days">
                     </div>
                     <div class="row g-3 mb-3">
                         <div class="col-md-6">
@@ -105,10 +114,10 @@
                         @include('content-management.includes.image-upload-hint')
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Gallery images</label>
+                        <label class="form-label">Image gallery</label>
                         <div id="activity_gallery_existing" class="mb-2"></div>
                         <input type="file" class="form-control" id="activity_images" name="images[]" multiple accept="image/*">
-                        <small class="text-muted">Add more photos anytime. Existing gallery images can be removed below when editing.</small>
+                        <small class="text-muted">These photos appear on this tour’s public page. Add more at any time, or remove one below while editing.</small>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -135,6 +144,8 @@ function resetForm() {
     document.getElementById('activityModalTitle').textContent = 'Add New Tour Activity';
     document.getElementById('activity_cover_preview').style.display = 'none';
     document.getElementById('activity_gallery_existing').innerHTML = '';
+    document.getElementById('activity_summary').value = '';
+    document.getElementById('activity_duration').value = '';
     if (window.CmsSummernote) {
         CmsSummernote.setCode('#activity_description', '');
     }
@@ -173,6 +184,8 @@ function editActivity(id) {
                 document.getElementById('activity_description').value = data.description || '';
             }
             document.getElementById('activity_status').value = data.status;
+            document.getElementById('activity_summary').value = data.summary || '';
+            document.getElementById('activity_duration').value = data.duration_label || '';
             document.getElementById('activity_sort_order').value = data.sort_order ?? 0;
             document.getElementById('activityModalTitle').textContent = 'Edit Tour Activity';
 

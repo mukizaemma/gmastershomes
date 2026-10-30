@@ -14,8 +14,10 @@ class TourActivity extends Model
     protected $fillable = [
         'title',
         'slug',
+        'duration_label',
         'cover_image',
         'description',
+        'summary',
         'status',
         'sort_order',
         'added_by',

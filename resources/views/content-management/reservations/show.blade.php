@@ -97,9 +97,27 @@
                                 <td>{{ $booking->occupancyLabel() !== '' ? $booking->occupancyLabel() : '—' }}</td>
                             </tr>
                             <tr>
-                                <th class="text-muted">Room</th>
+                                <th class="text-muted">Room / tour</th>
                                 <td>{{ $roomLabel }}</td>
                             </tr>
+                            @if(($booking->reservation_type ?? '') === 'tour_activity')
+                            <tr>
+                                <th class="text-muted">Tours requested</th>
+                                <td>{{ $booking->selectedTourTitles() !== '' ? $booking->selectedTourTitles() : '—' }}</td>
+                            </tr>
+                            <tr>
+                                <th class="text-muted">Accommodation</th>
+                                <td>{{ $booking->accommodation_preference ?: '—' }}</td>
+                            </tr>
+                            <tr>
+                                <th class="text-muted">Transport</th>
+                                <td>{{ $booking->transport_preference ?: '—' }}</td>
+                            </tr>
+                            <tr>
+                                <th class="text-muted">Destinations</th>
+                                <td style="white-space: pre-wrap;">{{ $booking->destinations ?: '—' }}</td>
+                            </tr>
+                            @endif
                             <tr>
                                 <th class="text-muted">Rooms requested</th>
                                 <td>{{ (int) ($booking->rooms ?? 1) }}</td>
@@ -122,8 +140,20 @@
                             </tr>
                             <tr>
                                 <th class="text-muted">Total</th>
-                                <td>{{ number_format((float) ($booking->total_amount ?? 0), 2) }}</td>
+                                <td>
+                                    @if(($booking->reservation_type ?? '') === 'tour_activity' && (float) ($booking->total_amount ?? 0) <= 0)
+                                        Quoted after this request
+                                    @else
+                                        {{ number_format((float) ($booking->total_amount ?? 0), 2) }}
+                                    @endif
+                                </td>
                             </tr>
+                            @if(filled($booking->cancellation_reason))
+                            <tr>
+                                <th class="text-muted">Cancellation reason</th>
+                                <td style="white-space: pre-wrap;">{{ $booking->cancellation_reason }}</td>
+                            </tr>
+                            @endif
                             <tr>
                                 <th class="text-muted">Additional request</th>
                                 <td>{{ $requestNote !== '' ? $requestNote : '—' }}</td>

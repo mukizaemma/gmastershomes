@@ -10,8 +10,18 @@
     @if($type === 'facility' && $booking->facility)
     <tr><td style="padding: 6px 0; border-bottom: 1px solid #eee;"><strong>Facility</strong></td><td style="padding: 6px 0; border-bottom: 1px solid #eee;">{{ $booking->facility->title }}</td></tr>
     @endif
-    @if($type === 'tour_activity' && $booking->tourActivity)
-    <tr><td style="padding: 6px 0; border-bottom: 1px solid #eee;"><strong>Activity</strong></td><td style="padding: 6px 0; border-bottom: 1px solid #eee;">{{ $booking->tourActivity->title ?? '—' }}</td></tr>
+    @if($type === 'tour_activity')
+    <tr><td style="padding: 6px 0; border-bottom: 1px solid #eee;"><strong>Tours</strong></td><td style="padding: 6px 0; border-bottom: 1px solid #eee;">{{ $booking->selectedTourTitles() !== '' ? $booking->selectedTourTitles() : '—' }}</td></tr>
+    @if(filled($booking->accommodation_preference))
+    <tr><td style="padding: 6px 0; border-bottom: 1px solid #eee;"><strong>Accommodation</strong></td><td style="padding: 6px 0; border-bottom: 1px solid #eee;">{{ $booking->accommodation_preference }}</td></tr>
+    @endif
+    @if(filled($booking->transport_preference))
+    <tr><td style="padding: 6px 0; border-bottom: 1px solid #eee;"><strong>Transport</strong></td><td style="padding: 6px 0; border-bottom: 1px solid #eee;">{{ $booking->transport_preference }}</td></tr>
+    @endif
+    @if(filled($booking->destinations))
+    <tr><td style="padding: 6px 0; border-bottom: 1px solid #eee;"><strong>Destinations</strong></td><td style="padding: 6px 0; border-bottom: 1px solid #eee;">{{ $booking->destinations }}</td></tr>
+    @endif
+    <tr><td style="padding: 6px 0; border-bottom: 1px solid #eee;"><strong>Price</strong></td><td style="padding: 6px 0; border-bottom: 1px solid #eee;">Sent after we review this request</td></tr>
     @endif
     <tr><td style="padding: 6px 0; border-bottom: 1px solid #eee;"><strong>Check-in / start</strong></td><td style="padding: 6px 0; border-bottom: 1px solid #eee;">{{ $booking->checkin_date?->format('Y-m-d') ?? '—' }}</td></tr>
     <tr><td style="padding: 6px 0; border-bottom: 1px solid #eee;"><strong>Check-out / end</strong></td><td style="padding: 6px 0; border-bottom: 1px solid #eee;">{{ $booking->checkout_date?->format('Y-m-d') ?? '—' }}</td></tr>

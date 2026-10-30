@@ -8,6 +8,7 @@
     $isFacility = filled($facilityId ?? null);
     $isActivity = filled($tourActivityId ?? null);
 @endphp
+@include('frontend.includes.recent-request-notice', ['formId' => $formId])
 <form action="{{ route('booking.submit') }}" method="POST" class="hotel-booking-form" id="{{ $formId }}" novalidate>
     @csrf
 

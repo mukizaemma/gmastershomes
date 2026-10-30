@@ -19,6 +19,9 @@
             <div class="activity-show__main">
                 <p class="activity-show__eyebrow">{{ site_trans('nav.experiences') }}</p>
                 <h1>{{ $activity->title }}</h1>
+                @if(filled($activity->duration_label))
+                    <p class="activity-show__duration">{{ $activity->duration_label }}</p>
+                @endif
 
                 @if($coverUrl)
                     <figure class="activity-show__cover">
@@ -53,6 +56,7 @@
             </div>
 
             <aside class="activity-show__panel" id="activity-enquiry">
+                @include('frontend.includes.recent-request-notice', ['formId' => 'tour-request-form'])
                 <p class="activity-show__eyebrow">{{ site_trans('booking.activity_enquiry_eyebrow') }}</p>
                 <h2>{{ site_trans('booking.activity_enquiry_title') }}</h2>
                 <p class="activity-show__lead">{{ site_trans('booking.activity_enquiry_lead') }}</p>
@@ -67,9 +71,8 @@
                     </div>
                 @endif
 
-                <form action="{{ route('enquiry.submit') }}" method="POST" data-no-spa-navigate>
+                <form id="tour-request-form" action="{{ route('tour-request.submit') }}" method="POST" data-no-spa-navigate>
                     @csrf
-                    <input type="hidden" name="enquiry_type" value="activity">
                     <input type="hidden" name="activity_id" value="{{ $activity->id }}">
 
                     <div class="activity-show__fields">
@@ -85,46 +88,17 @@
                             <span>{{ site_trans('booking.form_email') }} *</span>
                             <input type="email" name="email" value="{{ old('email') }}" required autocomplete="email">
                         </label>
-                        <fieldset class="is-wide">
-                            <legend>{{ site_trans('booking.activity_dates') }} *</legend>
-                            <div class="activity-show__dates">
-                                <label>
-                                    <span>{{ site_trans('booking.activity_date_start') }}</span>
-                                    <input type="date" name="activity_start" value="{{ old('activity_start') }}" min="{{ now()->toDateString() }}" required>
-                                </label>
-                                <label>
-                                    <span>{{ site_trans('booking.activity_date_end') }}</span>
-                                    <input type="date" name="activity_end" value="{{ old('activity_end') }}" min="{{ old('activity_start', now()->toDateString()) }}" required>
-                                </label>
-                            </div>
-                        </fieldset>
-                        <label>
-                            <span>{{ site_trans('booking.activity_guests') }} *</span>
-                            <input type="number" name="guests" value="{{ old('guests', 2) }}" min="1" max="40" required>
-                        </label>
-                        <label>
-                            <span>{{ site_trans('booking.activity_time') }} *</span>
-                            <select name="activity_time" required>
-                                @foreach(['morning', 'afternoon', 'evening', 'full'] as $timeKey)
-                                    <option value="{{ $timeKey }}" @selected(old('activity_time') === $timeKey)>{{ site_trans('booking.activity_time_'.$timeKey) }}</option>
-                                @endforeach
-                            </select>
-                        </label>
-                        <fieldset class="is-wide">
-                            <legend>{{ site_trans('booking.activity_choices') }} *</legend>
-                            <div class="activity-show__choices">
-                                @foreach($enquiryActivities as $option)
-                                    <label>
-                                        <input type="checkbox" name="activity_ids[]" value="{{ $option->id }}" @checked(in_array((int) $option->id, $selectedActivityIds, true))>
-                                        <span>{{ $option->title }}</span>
-                                    </label>
-                                @endforeach
-                            </div>
-                        </fieldset>
-                        <label class="is-wide">
-                            <span>{{ site_trans('booking.activity_expectations') }} *</span>
-                            <textarea name="expectations" rows="5" required placeholder="{{ site_trans('booking.activity_expectations_hint') }}">{{ old('expectations') }}</textarea>
-                        </label>
+                        @include('frontend.includes.tour-request-fields', [
+                            'activities' => $enquiryActivities,
+                            'selectedActivityIds' => $selectedActivityIds,
+                            'accommodation' => old('accommodation_preference', 'Mid-range lodges'),
+                            'transport' => old('transport_preference', '4x4 with an English-speaking driver-guide'),
+                            'destinations' => old('destinations'),
+                            'start' => old('activity_start'),
+                            'end' => old('activity_end'),
+                            'guests' => old('guests', 2),
+                            'notes' => old('notes'),
+                        ])
                     </div>
 
                     <button type="submit" class="theme-btn btn-style fill">

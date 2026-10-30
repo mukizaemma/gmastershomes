@@ -46,9 +46,12 @@
                                 </a>
                             </div>
                             <div class="p-4 d-flex flex-column flex-grow-1">
+                                @if(filled($activity->duration_label))
+                                    <p class="text-uppercase small mb-2" style="letter-spacing: 0.14em;">{{ $activity->duration_label }}</p>
+                                @endif
                                 <a wire:navigate href="{{ localized_route('activity', ['slug' => $activity->slug]) }}" class="h5 mb-2 text-dark text-decoration-none">{{ $activity->title }}</a>
                                 <div class="flex-grow-1 mb-3">
-                                    <p class="font-sm text-muted mb-0">{!! Str::words(strip_tags($activity->description ?? ''), 22, '...') !!}</p>
+                                    <p class="font-sm text-muted mb-0">{{ $activity->summary ?: \Illuminate\Support\Str::limit(trim(strip_tags($activity->description ?? '')), 140) }}</p>
                                 </div>
                                 <a wire:navigate href="{{ localized_route('activity', ['slug' => $activity->slug]) }}" class="theme-btn btn-style fill align-self-start">
                                     <span>{{ site_trans('home.view_details') }}</span>

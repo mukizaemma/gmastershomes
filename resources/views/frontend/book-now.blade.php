@@ -6,6 +6,29 @@
 
     <section class="book-channel section__padding">
         <div class="container">
+            @if($duplicatePrompt && ! $submitted)
+                <div class="recent-request" role="status">
+                    <h3>{{ site_trans('booking.recent_title') }}</h3>
+                    <p>{{ site_trans('booking.recent_body', [
+                        'kind' => $duplicateKind === 'tour' ? site_trans('booking.recent_kind_tour') : site_trans('booking.recent_kind_room'),
+                        'date' => $duplicateCreatedOn,
+                    ]) }}</p>
+                    @if($duplicateLinkSent)
+                        <p class="recent-request__ok">{{ site_trans('booking.recent_link_sent') }}</p>
+                    @endif
+                    @error('email')
+                        <p class="recent-request__bad">{{ $message }}</p>
+                    @enderror
+                    <div class="recent-request__actions">
+                        <button type="button" class="theme-btn btn-style fill" wire:click="submitAsNewRequest">
+                            <span>{{ site_trans('booking.recent_submit_new') }}</span>
+                        </button>
+                        <button type="button" class="theme-btn btn-style border" wire:click="emailRecentLink">
+                            <span>{{ site_trans('booking.recent_email_link') }}</span>
+                        </button>
+                    </div>
+                </div>
+            @endif
             @if($submitted)
                 <div class="book-channel__success text-center">
                     <div class="book-channel__success-icon" aria-hidden="true"><i class="fa-solid fa-circle-check"></i></div>

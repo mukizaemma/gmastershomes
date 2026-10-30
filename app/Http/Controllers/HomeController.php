@@ -44,6 +44,8 @@ use App\Mail\NewSubscriberNotification;
 use App\Mail\ReviewSubmittedAdminMail;
 use App\Mail\ReviewSubmittedGuestMail;
 use App\Mail\SubscriberThankYouMail;
+use App\Exceptions\RecentRequestExists;
+use App\Rules\ActiveEmail;
 use App\Services\PublicWebsiteData;
 use App\Services\BookingSubmissionService;
 use App\Services\SiteNotificationMail;
@@ -186,6 +188,8 @@ class HomeController extends Controller
     {
         try {
             $result = $bookingSubmission->submit($request);
+        } catch (RecentRequestExists $e) {
+            return redirect()->back()->withInput()->with('recent_request', $e->payload());
         } catch (\Illuminate\Validation\ValidationException $e) {
             throw $e;
         } catch (\Throwable $e) {
@@ -202,6 +206,27 @@ class HomeController extends Controller
             'Reservation received',
             'Your reservation request was saved (reference #'.$result['booking']->id.'). We will get back to you soon.'
         )->with('show_enquiry_contacts', true);
+    }
+
+    public function submitTourRequest(Request $request, BookingSubmissionService $bookingSubmission)
+    {
+        try {
+            $result = $bookingSubmission->submitTour($request);
+        } catch (RecentRequestExists $e) {
+            return redirect()->back()
+                ->withInput()
+                ->with('recent_request', $e->payload())
+                ->withFragment('activity-enquiry');
+        }
+
+        return $this->redirectBackWithContactEmailSwal(
+            redirect()->back()->withFragment('activity-enquiry'),
+            $result['admin_sent'],
+            $result['guest_sent'],
+            true,
+            'Tour request received',
+            'Your tour request was saved (reference #'.$result['booking']->id.'). We will send the price after we review the dates and preferences.'
+        );
     }
 
     /** @deprecated Use storeBooking() — kept for backward compatibility */
@@ -333,7 +358,7 @@ class HomeController extends Controller
             'enquiry_type' => 'required|in:general,room,activity',
             'names' => 'required|string|max:255',
             'phone' => 'required|string|max:60',
-            'email' => 'required|email|max:255',
+            'email' => ['required', 'email', 'max:255', new ActiveEmail],
         ];
 
         if ($enquiryType === 'general') {
@@ -392,7 +417,7 @@ class HomeController extends Controller
                 ->ordered()
                 ->pluck('title');
             $pageTitle = $page?->title ?: ($chosen->first() ?: 'Tour');
-            $payload['subject'] = 'Explore Rwanda: '.$pageTitle;
+            $payload['subject'] = 'Tour request: '.$pageTitle;
             $payload['adults'] = (int) $validated['guests'];
             $payload['checkin_date'] = $validated['activity_start'];
             $payload['checkout_date'] = $validated['activity_end'];
