@@ -88,6 +88,7 @@ class SettingsController extends Controller
             'price_currency' => 'nullable|in:usd,rwf',
             'latitude' => 'nullable|numeric|between:-90,90',
             'longitude' => 'nullable|numeric|between:-180,180',
+            'meta_description' => 'nullable|string|max:500',
         ]);
 
         $data = Setting::first();
@@ -105,6 +106,7 @@ class SettingsController extends Controller
         $data->linkedin = $request->input('linkedin');
         $data->twitter = $request->input('twitter');
         $data->keywords = $request->input('keywords');
+        $data->meta_description = trim((string) $request->input('meta_description', ''));
         $data->quote = $request->input('quote');
         $data->google_map_embed = $request->input('google_map_embed');
         $data->star_rating = $request->input('star_rating');
@@ -294,7 +296,7 @@ class SettingsController extends Controller
     {
         $request->validate([
             'keywords' => 'nullable|string',
-            'meta_description' => 'nullable|string|max:2000',
+            'meta_description' => 'nullable|string|max:500',
             'google_site_verification' => 'nullable|string|max:128',
         ]);
 

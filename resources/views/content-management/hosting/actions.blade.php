@@ -1,4 +1,7 @@
 <div class="hosting-tools d-flex flex-wrap gap-2 mb-4">
+    @if(auth()->user()->isSuperAdmin())
+        <a class="btn btn-outline-dark" href="{{ route('content-management.hosting.edit', $invoice) }}">Edit invoice</a>
+    @endif
     <a class="btn btn-primary" href="{{ route('content-management.hosting.download', $invoice) }}">Download invoice</a>
     <button type="button" class="btn btn-outline-dark" onclick="window.print()">Print / Save as PDF</button>
     @unless(request()->routeIs('content-management.hosting.show'))

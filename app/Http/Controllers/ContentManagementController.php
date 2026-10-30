@@ -1467,6 +1467,8 @@ class ContentManagementController extends Controller
             ]);
 
             if ($saved) {
+                \App\Services\PublicWebsiteData::flushCaches();
+
                 return redirect()->back()->with('success', 'Page hero updated successfully');
             } else {
                 return redirect()->back()->with('error', 'Failed to update page hero. Please try again.');

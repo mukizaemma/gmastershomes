@@ -159,7 +159,7 @@
                 </ul>
             </div>
             <div class="skojet-location__aside">
-                <a wire:navigate href="{{ localized_route('activities') }}" class="gm-explore-card">
+                <a wire:navigate href="{{ localized_route('activities') }}" class="gm-explore-card {{ filled($toursHeroImage ?? null) ? 'has-hero' : '' }}" @if(filled($toursHeroImage ?? null)) style="--gm-explore-image: url('{{ $toursHeroImage }}')" @endif>
                     <span class="skojet-intro__eyebrow">{{ site_trans('nav.experiences') }}</span>
                     <strong>{{ site_trans('home.explore_card_title') }}</strong>
                     <span>{{ site_trans('home.explore_card_lead') }}</span>

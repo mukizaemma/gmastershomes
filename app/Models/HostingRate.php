@@ -11,6 +11,7 @@ class HostingRate extends Model
         'ssl_amount',
         'support_amount',
         'usd_to_rwf',
+        'skipped_periods',
     ];
 
     protected $casts = [
@@ -18,5 +19,6 @@ class HostingRate extends Model
         'ssl_amount' => 'decimal:2',
         'support_amount' => 'decimal:2',
         'usd_to_rwf' => 'decimal:2',
+        'skipped_periods' => 'array',
     ];
 }

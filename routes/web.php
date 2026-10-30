@@ -262,8 +262,12 @@ Route::middleware(['auth', 'admin'])->prefix('content-management')->name('conten
     Route::delete('/reservations/{id}', [App\Http\Controllers\ContentManagementController::class, 'destroyReservation'])->name('reservations.destroy');
 
     Route::get('/hosting', [App\Http\Controllers\HostingInvoiceController::class, 'index'])->name('hosting.index');
+    Route::get('/hosting/settings', [App\Http\Controllers\HostingInvoiceController::class, 'settings'])->name('hosting.settings');
     Route::post('/hosting/rates', [App\Http\Controllers\HostingInvoiceController::class, 'updateRates'])->name('hosting.rates');
     Route::post('/hosting/exchange-rate', [App\Http\Controllers\HostingInvoiceController::class, 'updateExchangeRate'])->name('hosting.exchange-rate');
+    Route::get('/hosting/{invoice}/edit', [App\Http\Controllers\HostingInvoiceController::class, 'edit'])->name('hosting.edit');
+    Route::post('/hosting/{invoice}', [App\Http\Controllers\HostingInvoiceController::class, 'update'])->name('hosting.update');
+    Route::delete('/hosting/{invoice}', [App\Http\Controllers\HostingInvoiceController::class, 'destroy'])->name('hosting.destroy');
     Route::get('/hosting/{invoice}', [App\Http\Controllers\HostingInvoiceController::class, 'show'])->name('hosting.show');
     Route::get('/hosting/{invoice}/download', [App\Http\Controllers\HostingInvoiceController::class, 'download'])->name('hosting.download');
     Route::post('/hosting/{invoice}/paid', [App\Http\Controllers\HostingInvoiceController::class, 'markPaid'])->name('hosting.paid');

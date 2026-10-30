@@ -36,7 +36,7 @@ use Illuminate\Support\Facades\Cache;
 
 class PublicWebsiteData
 {
-    public const HOME_CACHE_KEY = 'public.home.payload.v2';
+    public const HOME_CACHE_KEY = 'public.home.payload.v3';
 
     public const LAYOUT_CACHE_KEY = 'public.layout.shared.v2';
 
@@ -86,6 +86,7 @@ class PublicWebsiteData
                 'gallery' => $homeGallery,
                 'homeGallery' => $homeGallery,
                 'restaurant' => Restaurant::query()->with(['images'])->first(),
+                'toursHeroImage' => page_hero_background(PageHero::getBySlug('activities')),
             ];
         });
     }

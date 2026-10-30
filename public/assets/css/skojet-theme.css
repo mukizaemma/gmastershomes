@@ -3692,6 +3692,16 @@ a.text-primary {
     background:
         linear-gradient(165deg, rgba(255, 255, 255, 0.2), transparent 46%),
         linear-gradient(160deg, var(--brand-primary) 0%, var(--brand-primary-dark) 100%);
+    background-size: cover;
+    background-position: center;
+}
+
+.gm-explore-card.has-hero {
+    background-image:
+        linear-gradient(180deg, rgba(8, 18, 36, 0.28) 0%, rgba(8, 18, 36, 0.78) 70%),
+        var(--gm-explore-image);
+    background-size: cover;
+    background-position: center;
 }
 
 .gm-explore-card strong {

@@ -100,6 +100,16 @@
                                         <input type="url" class="form-control" id="website" name="website" value="{{ old('website', $contact->website ?? '') }}" placeholder="https://example.com">
                                     </div>
                                     <div class="col-12">
+                                        <label for="shareDescription" class="form-label">Description when the site is shared</label>
+                                        <textarea class="form-control" name="meta_description" id="shareDescription" rows="4" maxlength="500">{{ old('meta_description', $data->meta_description ?? '') }}</textarea>
+                                        <p class="text-muted small mb-2 mt-1">This is the text WhatsApp and other apps show under the site name when someone shares a link. About 160 characters stay visible in the preview.</p>
+                                        <div class="border rounded p-3" style="max-width: 420px; background: #075e54; color: #fff;">
+                                            <strong id="sharePreviewTitle">{{ old('company', $data->company) }}</strong>
+                                            <p id="sharePreviewText" class="mb-1" style="color: #d9f2ef; font-size: 0.92rem;">{{ old('meta_description', $data->meta_description ?? '') }}</p>
+                                            <span style="color: #9fd9cf; font-size: 0.85rem;">{{ parse_url(config('app.url'), PHP_URL_HOST) ?: 'gmastershomes.com' }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
                                         <label for="address" class="form-label">Street address</label>
                                         <input type="text" class="form-control" id="address" name="address" value="{{ $contactValue('address') }}">
                                     </div>
@@ -636,14 +646,15 @@
                 <div class="card shadow-sm border-0">
                     <div class="card-header bg-white py-3">
                         <h5 class="mb-1">Site-wide SEO defaults</h5>
-                        <p class="text-muted small mb-0">Used in page meta tags and social previews unless a page overrides them.</p>
+                        <p class="text-muted small mb-0">The share description is also edited under Contacts &amp; Logo. Saving here updates the same text.</p>
                     </div>
                         <form action="{{ route('setting.keywords.update') }}" method="POST">
                             @csrf
                     <div class="card-body border-bottom-0 pb-4">
                             <div class="mb-3">
-                                <label class="form-label" for="seoMetaDescription">Meta description</label>
-                                <textarea class="form-control" name="meta_description" rows="3" id="seoMetaDescription" maxlength="2000" placeholder="A short summary of your hotel for Google and social sharing (150–320 characters recommended).">{{ old('meta_description', $data->meta_description ?? '') }}</textarea>
+                                <label class="form-label" for="seoMetaDescription">Description when the site is shared</label>
+                                <textarea class="form-control" name="meta_description" rows="4" id="seoMetaDescription" maxlength="500">{{ old('meta_description', $data->meta_description ?? '') }}</textarea>
+                                <p class="text-muted small mt-1 mb-0">Shown under the site name when a link is shared on WhatsApp and similar apps.</p>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label" for="seoKeywords">Meta keywords</label>
@@ -670,6 +681,25 @@
 @push('scripts')
 <script>
 jQuery(function ($) {
+    var shareDescription = document.getElementById('shareDescription');
+    var sharePreviewText = document.getElementById('sharePreviewText');
+    var sharePreviewTitle = document.getElementById('sharePreviewTitle');
+    var companyInput = document.getElementById('company');
+    function refreshSharePreview() {
+        if (sharePreviewText && shareDescription) {
+            sharePreviewText.textContent = shareDescription.value;
+        }
+        if (sharePreviewTitle && companyInput) {
+            sharePreviewTitle.textContent = companyInput.value;
+        }
+    }
+    if (shareDescription) {
+        shareDescription.addEventListener('input', refreshSharePreview);
+    }
+    if (companyInput) {
+        companyInput.addEventListener('input', refreshSharePreview);
+    }
+
     var settingsTermsToolbar = [
         ['style', ['style']],
         ['font', ['bold', 'underline', 'clear']],

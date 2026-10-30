@@ -274,6 +274,49 @@ class HostingBilling
         return $rates;
     }
 
+    /**
+     * @param  array{domain_amount: float|int|string, hosting_amount: float|int|string, ssl_amount: float|int|string, support_amount: float|int|string}  $amounts
+     */
+    public function updateInvoiceLines(HostingInvoice $invoice, array $amounts): void
+    {
+        $items = [
+            ['key' => 'domain', 'label' => 'Domain registration', 'amount' => $this->money($amounts['domain_amount'])],
+            ['key' => 'hosting', 'label' => 'Hosting', 'amount' => $this->money($amounts['hosting_amount'])],
+            ['key' => 'ssl', 'label' => 'SSL', 'amount' => $this->money($amounts['ssl_amount'])],
+            ['key' => 'support', 'label' => 'Support', 'amount' => $this->money($amounts['support_amount'])],
+        ];
+
+        $invoice->forceFill([
+            'lines' => $items,
+            'total' => $this->sumLines($items),
+        ])->save();
+    }
+
+    public function deleteInvoice(HostingInvoice $invoice): void
+    {
+        $rates = $this->rates();
+        $skipped = $this->skippedPeriods();
+        $day = $invoice->period_start?->toDateString();
+        if ($day) {
+            $skipped[] = $day;
+            $rates->skipped_periods = array_values(array_unique($skipped));
+            $rates->save();
+        }
+
+        $invoice->delete();
+    }
+
+    public function lineAmount(HostingInvoice $invoice, string $key, mixed $fallback = 0): string
+    {
+        foreach ($invoice->lines ?? [] as $line) {
+            if (($line['key'] ?? '') === $key) {
+                return $this->money($line['amount'] ?? 0);
+            }
+        }
+
+        return $this->money($fallback);
+    }
+
     public function markPaid(HostingInvoice $invoice): void
     {
         if ($invoice->isPaid()) {
@@ -363,6 +406,10 @@ class HostingBilling
     {
         $start = Carbon::parse($periodStart->toDateString())->startOfDay();
 
+        if (in_array($start->toDateString(), $this->skippedPeriods(), true)) {
+            return;
+        }
+
         if (HostingInvoice::query()->whereDate('period_start', $start->toDateString())->exists()) {
             return;
         }
@@ -413,6 +460,16 @@ class HostingBilling
     private function money(mixed $amount): string
     {
         return number_format((float) $amount, 2, '.', '');
+    }
+
+    /**
+     * @return list<string>
+     */
+    private function skippedPeriods(): array
+    {
+        $skipped = $this->rates()->skipped_periods ?? [];
+
+        return is_array($skipped) ? array_values($skipped) : [];
     }
 
     private function latestPaid(): ?HostingInvoice

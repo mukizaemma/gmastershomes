@@ -201,7 +201,7 @@ if (! function_exists('site_meta_description')) {
         $setting = $setting ?? \App\Models\Setting::first();
         $description = trim((string) ($setting?->meta_description ?? ''));
         if ($description !== '') {
-            return \Illuminate\Support\Str::limit($description, 320);
+            return \Illuminate\Support\Str::limit($description, 500);
         }
 
         $quote = trim(strip_tags((string) ($setting?->quote ?? '')));
