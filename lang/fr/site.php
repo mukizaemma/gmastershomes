@@ -574,6 +574,8 @@ return [
         'activity_submit_whatsapp' => 'Soumettre par WhatsApp',
         'activity_tours_required' => 'Choisissez au moins un circuit.',
         'activity_whatsapp_missing' => 'Ajoutez un numéro WhatsApp avec l’indicatif du pays dans les coordonnées de l’hôtel.',
+        'activity_whatsapp_intro' => 'Je souhaite demander un itinéraire de circuit et safari.',
+        'activity_whatsapp_names' => 'Noms',
         'activity_gallery' => 'Galerie',
         'activity_more' => 'Autres circuits',
     ],

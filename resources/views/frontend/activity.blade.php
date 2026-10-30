@@ -118,6 +118,8 @@
                             data-digits="{{ hotel_whatsapp_digits() }}"
                             data-hotel="{{ config('app.name') }}"
                             data-missing="{{ site_trans('booking.activity_whatsapp_missing') }}"
+                            data-intro="{{ site_trans('booking.activity_whatsapp_intro') }}"
+                            data-names-label="{{ site_trans('booking.activity_whatsapp_names') }}"
                             data-tours-required="{{ site_trans('booking.activity_tours_required') }}"
                         >
                             <span><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> {{ site_trans('booking.activity_submit_whatsapp') }}</span>
@@ -214,14 +216,17 @@
             return (el.value || '').trim();
         }
 
-        var lines = ['Hello ' + (link.getAttribute('data-hotel') || '') + ',', '', 'I would like to request a tour.'];
+        var lines = ['Hello ' + (link.getAttribute('data-hotel') || '') + ',', '', link.getAttribute('data-intro') || 'I would like to request a tour itinerary.'];
         ['names', 'phone', 'email', 'activity_start', 'activity_end', 'guests', 'accommodation_preference', 'transport_preference', 'destinations', 'notes'].forEach(function (name) {
             var el = form.elements[name];
             var value = valueFor(name);
             if (!el || value === '') {
                 return;
             }
-            lines.push(labelFor(el) + ': ' + value);
+            var label = name === 'names'
+                ? (link.getAttribute('data-names-label') || 'Names')
+                : labelFor(el);
+            lines.push(label + ': ' + value);
         });
 
         var tours = [];

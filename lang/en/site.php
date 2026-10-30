@@ -606,6 +606,8 @@ return [
         'activity_submit_whatsapp' => 'Submit via WhatsApp',
         'activity_tours_required' => 'Choose at least one tour.',
         'activity_whatsapp_missing' => 'Add a WhatsApp number with the country code in the hotel contact settings.',
+        'activity_whatsapp_intro' => 'I would like to request a tour itinerary.',
+        'activity_whatsapp_names' => 'Names',
         'activity_gallery' => 'Gallery',
         'activity_more' => 'More tours',
     ],
